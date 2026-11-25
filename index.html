@@ -676,6 +676,83 @@
       font-weight: 700;
     }
 
+    /* Auto Fee Calculator Box inside Cost Card */
+    .fee-calc-box {
+      background: #f8fafc;
+      border: 1px solid #dbe4f0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fee-calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .fee-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .fee-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .fee-field label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fee-field select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .fee-field select:focus {
+      border-color: var(--accent);
+    }
+
+    .fee-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--ink-secondary);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 5px 8px;
+      gap: 6px;
+    }
+
+    .fee-area-note {
+      font-size: 11px;
+      color: var(--ink-muted);
+      line-height: 1.38;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
     /* ============================================================================
        OFFICIAL STANDARD PRINT FORM — EXACT MATCH TO UPLOADED PRINTOUT
        Times New Roman | #FCE4D6 Peach Banners | 2px Outer / 1px Inner Borders
@@ -775,6 +852,32 @@
     .f-input.b { font-weight: 700; }
     .f-input.c { text-align: center; }
     .f-input.r { text-align: right; }
+
+    .f-select {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9.6pt;
+      font-weight: 700;
+      color: #000000;
+      text-align: center;
+      text-align-last: center;
+      padding: 1px 2px;
+      margin: 0;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .f-select:focus {
+      background: #eff6ff;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .f-select:hover:not(:focus) {
+        background: rgba(20, 100, 244, 0.06);
+      }
+    }
 
     .f-input:focus,
     .f-textarea:focus,
@@ -1524,24 +1627,8 @@
               <tr>
                 <td class="lbl">Loại xe:</td>
                 <td class="val-c">
-                  <input id="carModel" class="f-input b c" type="text" list="vinfastModels" />
-                  <datalist id="vinfastModels">
-                    <option value="MPV7"></option>
-                    <option value="VF 3"></option>
-                    <option value="VF 5 Plus"></option>
-                    <option value="VF 6 Eco"></option>
-                    <option value="VF 6 Plus"></option>
-                    <option value="VF 7 Eco"></option>
-                    <option value="VF 7 Plus"></option>
-                    <option value="VF 8 Eco"></option>
-                    <option value="VF 8 Plus"></option>
-                    <option value="VF 9 Eco"></option>
-                    <option value="VF 9 Plus"></option>
-                    <option value="Minio Green"></option>
-                    <option value="Herio Green"></option>
-                    <option value="Nerio Green"></option>
-                    <option value="Limo Green"></option>
-                  </datalist>
+                  <select id="carModel" class="f-select date-picker-screen" aria-label="Chọn loại xe"></select>
+                  <span id="carModelPrint" class="print-only-date" style="white-space: normal; word-break: break-word;"></span>
                 </td>
               </tr>
               <tr>
@@ -1784,7 +1871,97 @@
         </div>
       </div>
 
-      <!-- Card 2: Điều chỉnh Ưu đãi / Gút giá -->
+      <!-- Card 2: Cấu hình xe & Tính bảng phí chuẩn (tách riêng, đặt trên Hạng mục hỗ trợ) -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+            <span>Cấu hình xe &amp; Bảng phí chuẩn</span>
+          </div>
+          <span id="feeSeatBadge" class="count-badge">7 chỗ</span>
+        </div>
+        <div class="tool-card-body">
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <div class="fee-field full">
+              <label for="feeCarModelSelect">Chọn dòng xe (Sheet Loai Xe)</label>
+              <select id="feeCarModelSelect"></select>
+            </div>
+            <div class="fee-field full">
+              <label for="feeCustomerGroup">
+                <span>Đối tượng KH (Chính sách TLX2)</span>
+                <span id="feeTlx2Tag" style="color: var(--success);">TLX2: 9%</span>
+              </label>
+              <select id="feeCustomerGroup">
+                <option value="personal">Khách cá nhân</option>
+                <option value="priority">Công an, Quân đội, VNPost</option>
+              </select>
+            </div>
+            <div class="fee-calc-grid" style="align-items: end;">
+              <div class="fee-field">
+                <label for="feeUsage">Mục đích sử dụng</label>
+                <select id="feeUsage">
+                  <option value="family">Gia đình (Biển Trắng)</option>
+                  <option value="udcn">KD UDCN (Biển Vàng)</option>
+                  <option value="taxi">Taxi (Biển Vàng)</option>
+                </select>
+              </div>
+              <div class="fee-field">
+                <label for="feePlateArea">Lệ phí biển số (01/26)</label>
+                <select id="feePlateArea">
+                  <option value="province">Phường/Xã (140,000)</option>
+                  <option value="city">TP.HCM, Hà Nội (14,000,000)</option>
+                </select>
+              </div>
+              <div class="fee-field">
+                <label for="feeInsurer">Hãng BH vật chất</label>
+                <select id="feeInsurer">
+                  <option value="PJICO">PJICO</option>
+                  <option value="DBV">DBV (BT)</option>
+                  <option value="MIC">MIC</option>
+                  <option value="BIC">BIC</option>
+                  <option value="BAOMINH">BẢO MINH</option>
+                  <option value="BAOVIET">BẢO VIỆT</option>
+                  <option value="TASCO">TASCO</option>
+                </select>
+              </div>
+              <div class="fee-field">
+                <label for="feeRoadTerm">Phí bảo trì đường bộ</label>
+                <select id="feeRoadTerm">
+                  <option value="1y">1 năm (12 tháng)</option>
+                  <option value="3y">3 năm (36 tháng)</option>
+                </select>
+              </div>
+              <div class="fee-field full">
+                <div class="fee-meta-bar">
+                  <span>Mức BH vật chất (theo Giá XHĐ):</span>
+                  <strong id="feeBhvcRateTag" class="tabular" style="color: var(--accent);">1.16% (7,569,000 đ)</strong>
+                </div>
+              </div>
+              <div class="fee-field full">
+                <label for="feeServiceArea">Khu vực Dịch vụ đăng ký xe</label>
+                <select id="feeServiceArea">
+                  <option value="phanthiet">1. TP. Phan Thiết cũ — 3,500,000 đ</option>
+                  <option value="binhthuan" selected>2. Còn lại Bình Thuận cũ — 4,000,000 đ</option>
+                  <option value="lamdong">3. Lâm Đồng &amp; Đăk Nông cũ — 4,500,000 đ</option>
+                  <option value="outside">4. Ngoài tỉnh Bình Thuận cũ — Từ 5,500,000 đ</option>
+                </select>
+              </div>
+            </div>
+            <div id="feeAreaNote" class="fee-area-note" style="display: none;">
+              <strong>TP. Phan Thiết cũ gồm:</strong> P. Hàm Thắng, P. Bình Thuận, P. Mũi Né, P. Phú Thủy, P. Phan Thiết, P. Tiến Thành, Xã Tuyên Quang.
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding-top: 2px;">
+              <label class="check-label" for="chkAutoBhvc" style="font-size: 12px;">
+                <input type="checkbox" id="chkAutoBhvc" />
+                <span>Tự cập nhật BHVC theo Giá XHĐ</span>
+              </label>
+              <button type="button" class="btn btn-sm btn-primary" id="btnApplyStandardFees">Áp dụng bảng phí</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Điều chỉnh Ưu đãi / Gút giá -->
       <div class="tool-card">
         <div class="tool-card-head">
           <div class="tool-card-title">
@@ -1801,7 +1978,7 @@
         </div>
       </div>
 
-      <!-- Card 3: Chi phí liên quan (Thêm / Xóa dòng) -->
+      <!-- Card 4: Chi phí liên quan (Danh sách Thêm / Xóa / Sắp xếp dòng) -->
       <div class="tool-card">
         <div class="tool-card-head">
           <div class="tool-card-title">
@@ -1886,6 +2063,340 @@
         approved: { label: 'Đã ký duyệt', cls: 'status-approved' }
       };
 
+      /* ======================== VEHICLE CATALOG (Sheet "Loai Xe" — 26 models) ======================== */
+      const VEHICLE_CATALOG = [
+        { name: 'MINIO GREEN', seats: 4, group: 'mini', miniType: 'minio' },
+        { name: 'HERIO GREEN', seats: 5, group: 'vf5_herio' },
+        { name: 'NERIO GREEN', seats: 5, group: 'mid' },
+        { name: 'LIMO GREEN', seats: 7, group: 'mid' },
+        { name: 'EC VAN TIÊU CHUẨN', seats: 4, group: 'ec_van' },
+        { name: 'EC VAN NÂNG CAO', seats: 4, group: 'ec_van' },
+        { name: 'EC VAN NÂNG CAO (Cửa trượt)', seats: 4, group: 'ec_van' },
+        { name: 'VF2', seats: 4, group: 'mini', miniType: 'vf2' },
+        { name: 'VF3 ECO', seats: 4, group: 'mini', miniType: 'vf3' },
+        { name: 'VF3 PLUS', seats: 4, group: 'mini', miniType: 'vf3' },
+        { name: 'VF5', seats: 5, group: 'vf5_herio' },
+        { name: 'VF6 ECO', seats: 5, group: 'mid' },
+        { name: 'VF6 PLUS', seats: 5, group: 'mid' },
+        { name: 'VF7 ECO', seats: 5, group: 'mid' },
+        { name: 'VF7 PLUS TIÊU CHUẨN 2 - TRẦN THÉP', seats: 5, group: 'mid' },
+        { name: 'VF7 PLUS NC TIÊU CHUẨN 3 - TRẦN THÉP', seats: 5, group: 'mid' },
+        { name: 'VF MVP 7', seats: 7, group: 'mid' },
+        { name: 'VF8 ECO TIÊU CHUẨN 1 - 1 CẦU', seats: 5, group: 'mid' },
+        { name: 'VF8 ECO NÂNG CAO - 1 CẦU', seats: 5, group: 'mid' },
+        { name: 'VF8 PLUS TIÊU CHUẨN 1 - 2 CẦU', seats: 5, group: 'mid' },
+        { name: 'VF8 ALL NEW', seats: 5, group: 'mid' },
+        { name: 'VF9 ECO', seats: 7, group: 'vf9' },
+        { name: 'VF9 PLUS', seats: 7, group: 'vf9' },
+        { name: 'LẠC HỒNG', seats: 7, group: 'vf9' },
+        { name: 'LẠC HỒNG (chống đạn)', seats: 7, group: 'vf9' },
+        { name: 'VF WILD COMFORT', seats: 5, group: 'pickup' }
+      ];
+
+      const DEFAULT_FEE_CONFIG = {
+        customerGroup: 'personal',
+        usage: 'family',
+        plateArea: 'province',
+        insurer: 'PJICO',
+        roadTerm: '1y',
+        serviceArea: 'binhthuan',
+        autoBhvc: false
+      };
+
+      /* Chính sách Mãnh liệt vì Tương lai xanh 2 (TLX2) */
+      function getTlx2Rate(vehicle, customerGroup) {
+        const isPriority = customerGroup === 'priority';
+        const name = String(vehicle?.name || '').toUpperCase();
+        const grp = vehicle?.group || 'mid';
+
+        // Nhóm 1: VF 2, VF 3 & Minio Green -> Cá nhân 3% | CA/QĐ/VNPost 6%
+        if (grp === 'mini' || name.includes('VF2') || name.includes('VF 2') || name.includes('VF3') || name.includes('VF 3') || name.includes('MINIO')) {
+          return isPriority ? 6 : 3;
+        }
+
+        // Nhóm 2: VF 9, VF 8 Thế hệ mới (VF8 ALL NEW), Lạc Hồng 900 LX, EC Van & VF Wild -> Cá nhân 5% | CA/QĐ/VNPost 7%
+        if (
+          grp === 'vf9' ||
+          grp === 'ec_van' ||
+          grp === 'pickup' ||
+          name.includes('VF8 ALL NEW') ||
+          name.includes('THẾ HỆ MỚI') ||
+          name.includes('LẠC HỒNG') ||
+          name.includes('VF9') ||
+          name.includes('VF 9') ||
+          name.includes('EC VAN') ||
+          name.includes('WILD')
+        ) {
+          return isPriority ? 7 : 5;
+        }
+
+        // Nhóm 3: Các dòng xe còn lại -> 9%
+        return 9;
+      }
+
+      function lookupVehicle(modelInput) {
+        const raw = String(modelInput || '').trim().toUpperCase();
+        if (!raw) return { name: 'Chưa chọn xe', seats: 5, group: 'mid' };
+        const exact = VEHICLE_CATALOG.find((v) => v.name.toUpperCase() === raw);
+        if (exact) return exact;
+        if (raw.includes('MPV7') || raw.includes('MVP 7') || raw.includes('MVP7')) {
+          return VEHICLE_CATALOG.find((v) => v.name === 'VF MVP 7');
+        }
+        const partial = VEHICLE_CATALOG.find((v) => raw.includes(v.name.toUpperCase()) || v.name.toUpperCase().includes(raw));
+        if (partial) return partial;
+        if (raw.includes('EC VAN')) return { name: raw, seats: 4, group: 'ec_van' };
+        if (raw.includes('WILD')) return { name: raw, seats: 5, group: 'pickup' };
+        if (raw.includes('VF9') || raw.includes('VF 9') || raw.includes('LẠC HỒNG')) return { name: raw, seats: 7, group: 'vf9' };
+        if (raw.includes('LIMO')) return { name: raw, seats: 7, group: 'mid' };
+        if (raw.includes('VF3') || raw.includes('VF 3')) return { name: raw, seats: 4, group: 'mini', miniType: 'vf3' };
+        if (raw.includes('VF2') || raw.includes('VF 2')) return { name: raw, seats: 4, group: 'mini', miniType: 'vf2' };
+        if (raw.includes('MINIO')) return { name: raw, seats: 4, group: 'mini', miniType: 'minio' };
+        if (raw.includes('VF5') || raw.includes('VF 5') || raw.includes('HERIO')) return { name: raw, seats: 5, group: 'vf5_herio' };
+        return { name: raw, seats: 5, group: 'mid' };
+      }
+
+      /* Sheet "CHI PHÍ LIÊN QUAN" — Exact BHVC lookup for all 7 insurers */
+      function calcBhvc(insurer, usage, vehicle, invoicePrice) {
+        const price = invoicePrice || 0;
+        const isCommercial = usage === 'udcn' || usage === 'taxi';
+        const isTaxi = usage === 'taxi';
+        const grp = vehicle.group || 'mid';
+        const isEcVan = grp === 'ec_van';
+        const isMini = grp === 'mini';
+        const isVf5Herio = grp === 'vf5_herio';
+        const isVf9 = grp === 'vf9';
+
+        let rate = 0;
+        let minFee = 0;
+        let note = '';
+
+        if (insurer === 'PJICO') {
+          if (isTaxi) {
+            rate = 0.023;
+          } else if (isCommercial) {
+            if (price < 600000000) rate = 0.0163;
+            else if (price < 800000000) rate = 0.0151;
+            else rate = 0.0146;
+          } else {
+            if (price < 400000000) {
+              minFee = (vehicle.miniType === 'vf2' || vehicle.miniType === 'minio') ? 4000000 : 5000000;
+              rate = 0;
+              note = `Phí tối thiểu ${formatMoney(minFee)}`;
+            } else if (price < 600000000) rate = 0.0141;
+            else if (price < 800000000) rate = 0.0116;
+            else rate = 0.01;
+          }
+        } else if (insurer === 'DBV') {
+          if (isCommercial) {
+            rate = price < 500000000 ? 0.023 : 0.016;
+          } else {
+            if (price < 400000000) {
+              minFee = 5000000;
+              note = 'Phí tối thiểu 5,000,000';
+            } else if (price < 600000000) rate = 0.014;
+            else if (price < 800000000) rate = 0.0125;
+            else if (price < 1000000000) rate = 0.01;
+            else rate = 0.0095;
+          }
+        } else if (insurer === 'MIC') {
+          if (isCommercial) {
+            rate = price < 500000000 ? 0.017 : 0.016;
+          } else {
+            if (price < 400000000) {
+              minFee = 5000000;
+              note = 'Phí tối thiểu 5,000,000';
+            } else if (price < 600000000) rate = 0.015;
+            else if (price < 800000000) rate = 0.0135;
+            else rate = 0.011;
+          }
+        } else if (insurer === 'BIC') {
+          if (isEcVan) {
+            rate = 0.013;
+          } else if (isCommercial) {
+            rate = price < 500000000 ? 0.0275 : 0.016;
+          } else {
+            if (price < 600000000) {
+              rate = 0.015;
+              minFee = 5500000;
+            } else if (price < 700000000) rate = 0.012155;
+            else if (price < 800000000) rate = 0.0119;
+            else if (price < 1000000000) rate = 0.0108;
+            else rate = 0.011;
+          }
+        } else if (insurer === 'BAOMINH') {
+          if (isCommercial) {
+            rate = price < 500000000 ? 0.017 : 0.016;
+          } else {
+            if (price < 500000000) {
+              rate = 0.0125;
+              minFee = 4400000;
+            } else rate = 0.011;
+          }
+        } else if (insurer === 'BAOVIET') {
+          if (isCommercial) {
+            return { amount: 0, rateLabel: 'Báo giá riêng' };
+          }
+          if (isMini || isEcVan) rate = 0.0215;
+          else if (isVf5Herio) rate = 0.016;
+          else if (isVf9) rate = 0.0145;
+          else rate = 0.015;
+        } else if (insurer === 'TASCO') {
+          if (isCommercial) {
+            rate = (isMini || isEcVan) ? 0.0185 : 0.014;
+            minFee = 6000000;
+          } else {
+            if (isMini || isEcVan) {
+              rate = 0.0149;
+              minFee = 4500000;
+            } else if (isVf5Herio) {
+              rate = 0.0125;
+              minFee = 6000000;
+            } else {
+              rate = 0.01;
+              minFee = 6000000;
+            }
+          }
+        }
+
+        const rawAmount = rate > 0 ? Math.round(price * rate) : 0;
+        const amount = Math.max(rawAmount, minFee);
+        const rateLabel = rate > 0
+          ? `${(rate * 100).toFixed(rate * 100 % 1 === 0 ? 1 : (String(rate * 100).split('.')[1]?.length > 2 ? 4 : 2))}%${minFee > 0 && rawAmount < minFee ? ' (tối thiểu)' : ''}`
+          : (note || '—');
+
+        return { amount, rateLabel };
+      }
+
+      function calcStandardFeeBreakdown() {
+        const cfg = Object.assign({}, DEFAULT_FEE_CONFIG, state.feeConfig || {});
+        const vehicle = lookupVehicle(state.carModel);
+        const totals = computeTotals();
+        const invoicePrice = totals.closingPrice;
+
+        // 1. Thuế trước bạ: Miễn 100% đến 31/12/2030
+        const tax = 0;
+
+        // 2. Lệ phí đăng ký biển số (Giảm từ 01/26)
+        const plate = cfg.plateArea === 'city' ? 14000000 : 140000;
+
+        // 3. Lệ phí đăng kiểm
+        const inspection = 90000;
+
+        // 4. Bảo hiểm TNDS + Tai nạn số chỗ ngồi
+        let tnds = 530700;
+        if (cfg.usage === 'taxi') {
+          tnds = vehicle.seats >= 7 ? 2049600 : 1443720;
+        } else if (cfg.usage === 'udcn') {
+          tnds = vehicle.seats >= 7 ? 1218000 : 861600;
+        } else {
+          if (vehicle.seats <= 4) tnds = 520700;
+          else if (vehicle.seats >= 7) tnds = 1013400;
+          else tnds = 530700;
+        }
+
+        // 5. Bảo hiểm vật chất xe
+        const bhvc = calcBhvc(cfg.insurer, cfg.usage, vehicle, invoicePrice);
+
+        // 6. Phí bảo trì đường bộ
+        const isCommercialRoad = cfg.usage !== 'family' || vehicle.group === 'ec_van' || vehicle.group === 'pickup';
+        let roadFee = 1560000;
+        let roadLabel = 'Phí bảo trì đường bộ (12 tháng)';
+        if (isCommercialRoad) {
+          roadFee = 2160000;
+          roadLabel = 'Phí bảo trì đường bộ (12 tháng)';
+        } else if (cfg.roadTerm === '3y') {
+          roadFee = 4325000;
+          roadLabel = 'Phí bảo trì đường bộ (36 tháng)';
+        } else {
+          roadFee = 1560000;
+          roadLabel = 'Phí bảo trì đường bộ (12 tháng)';
+        }
+
+        // 7. Dịch vụ đăng ký xe
+        const serviceMap = {
+          phanthiet: 3500000,
+          binhthuan: 4000000,
+          lamdong: 4500000,
+          outside: 5500000
+        };
+        const serviceFee = serviceMap[cfg.serviceArea] || 4000000;
+
+        return { vehicle, tax, plate, inspection, tnds, bhvc, roadFee, roadLabel, serviceFee };
+      }
+
+      function populateCarModelSelects() {
+        const sheetSel = document.getElementById('carModel');
+        const panelSel = document.getElementById('feeCarModelSelect');
+        [sheetSel, panelSel].forEach((sel) => {
+          sel.innerHTML = '<option value="">— Chọn loại xe —</option>';
+          VEHICLE_CATALOG.forEach((v) => {
+            const opt = document.createElement('option');
+            opt.value = v.name;
+            opt.textContent = sel === panelSel ? `${v.name} (${v.seats} chỗ)` : v.name;
+            sel.appendChild(opt);
+          });
+        });
+      }
+
+      function setCarModelValue(val) {
+        let normalized = String(val || '').trim();
+        if (normalized.toUpperCase() === 'MPV7') normalized = 'VF MVP 7';
+        const sheetSel = document.getElementById('carModel');
+        const panelSel = document.getElementById('feeCarModelSelect');
+        [sheetSel, panelSel].forEach((sel) => {
+          if (normalized && !Array.from(sel.options).some((o) => o.value === normalized)) {
+            const opt = document.createElement('option');
+            opt.value = normalized;
+            opt.textContent = normalized;
+            sel.appendChild(opt);
+          }
+          sel.value = normalized;
+        });
+        document.getElementById('carModelPrint').textContent = normalized;
+      }
+
+      function updateFeeCalculatorUI() {
+        const cfg = Object.assign({}, DEFAULT_FEE_CONFIG, state.feeConfig || {});
+        const bd = calcStandardFeeBreakdown();
+        const tlx2Rate = getTlx2Rate(bd.vehicle, cfg.customerGroup);
+        document.getElementById('feeSeatBadge').textContent = `${bd.vehicle.seats} chỗ`;
+        document.getElementById('feeTlx2Tag').textContent = `TLX2: ${tlx2Rate}%`;
+        document.getElementById('feeBhvcRateTag').textContent = `${bd.bhvc.rateLabel} (${formatMoney(bd.bhvc.amount)} đ)`;
+        document.getElementById('feeAreaNote').style.display = cfg.serviceArea === 'phanthiet' ? 'block' : 'none';
+        document.getElementById('carModelPrint').textContent = state.carModel || '';
+      }
+
+      function autoApplyTlx2Rate() {
+        const cfg = Object.assign({}, DEFAULT_FEE_CONFIG, state.feeConfig || {});
+        const vehicle = lookupVehicle(state.carModel);
+        const rate = getTlx2Rate(vehicle, cfg.customerGroup);
+        const tlx2Promo = (state.promos || []).find((p) =>
+          p.type === 'percent' && /tương lai xanh|tlx/i.test(p.name || '')
+        );
+        if (tlx2Promo) {
+          tlx2Promo.value = rate;
+          renderPromoConfigPanel();
+        }
+      }
+
+      function applyStandardFeesToCosts() {
+        const bd = calcStandardFeeBreakdown();
+        state.costItems = [
+          { id: 'c1', label: 'Thuế trước bạ', amount: bd.tax },
+          { id: 'c2', label: 'Phí đăng ký biển số', amount: bd.plate },
+          { id: 'c3', label: 'Lệ phí đăng kiểm', amount: bd.inspection },
+          { id: 'c4', label: 'Bảo hiểm TNDS', amount: bd.tnds },
+          { id: 'c5', label: 'Bảo hiểm vật chất', amount: bd.bhvc.amount },
+          { id: 'c6', label: bd.roadLabel, amount: bd.roadFee },
+          { id: 'c7', label: 'Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)', amount: bd.serviceFee }
+        ];
+        renderCostRows();
+        renderCostConfigPanel();
+        renderCalculationsAndPromos();
+        scheduleAutosave();
+        showToast(`Đã áp dụng bảng phí chuẩn cho ${bd.vehicle.name} (${bd.vehicle.seats} chỗ)`);
+      }
+
       function createSampleState() {
         return {
           recordId: null,
@@ -1894,7 +2405,7 @@
           customerName: 'PHẠM THỊ NGỌC NHUNG',
           quoteDate: '2026-11-25',
           customerAddress: 'Số Nhà 519, Tổ 2, Thôn Lập Sơn, Xã Tân Lập,\nTỉnh Lâm Đồng',
-          carModel: 'MPV7',
+          carModel: 'VF MVP 7',
           representative: '',
           carColor: 'Đen/Nội Thất Nâu',
           customerDob: '28/02/2002',
@@ -1959,7 +2470,8 @@
           ],
           bonusPriceDiff: null,
           bonusHot: null,
-          bonusProductivity: null
+          bonusProductivity: null,
+          feeConfig: Object.assign({}, DEFAULT_FEE_CONFIG)
         };
       }
 
@@ -2024,7 +2536,8 @@
           ],
           bonusPriceDiff: null,
           bonusHot: null,
-          bonusProductivity: null
+          bonusProductivity: null,
+          feeConfig: Object.assign({}, DEFAULT_FEE_CONFIG)
         };
       }
 
@@ -2103,6 +2616,7 @@
 
       function normalizeState(raw) {
         const merged = Object.assign(createBlankState(), raw || {});
+        merged.feeConfig = Object.assign({}, DEFAULT_FEE_CONFIG, raw?.feeConfig || {});
         if (!Array.isArray(merged.costItems)) {
           const old = raw?.costs || {};
           merged.costItems = [
@@ -2237,6 +2751,7 @@
         });
 
         document.getElementById('quoteDatePrint').textContent = formatDateVN(state.quoteDate);
+        updateFeeCalculatorUI();
       }
 
       function renderPromoConfigPanel() {
@@ -2307,7 +2822,7 @@
         document.getElementById('customerName').value = state.customerName || '';
         document.getElementById('quoteDate').value = state.quoteDate || '';
         document.getElementById('customerAddress').value = state.customerAddress || '';
-        document.getElementById('carModel').value = state.carModel || '';
+        setCarModelValue(state.carModel || '');
         document.getElementById('representative').value = state.representative || '';
         document.getElementById('carColor').value = state.carColor || '';
         document.getElementById('customerDob').value = state.customerDob || '';
@@ -2343,6 +2858,16 @@
         document.getElementById('bonusPriceDiff').value = formatMoney(state.bonusPriceDiff, true);
         document.getElementById('bonusHot').value = formatMoney(state.bonusHot, true);
         document.getElementById('bonusProductivity').value = formatMoney(state.bonusProductivity, true);
+
+        const fc = Object.assign({}, DEFAULT_FEE_CONFIG, state.feeConfig || {});
+        state.feeConfig = fc;
+        document.getElementById('feeCustomerGroup').value = fc.customerGroup;
+        document.getElementById('feeUsage').value = fc.usage;
+        document.getElementById('feePlateArea').value = fc.plateArea;
+        document.getElementById('feeInsurer').value = fc.insurer;
+        document.getElementById('feeRoadTerm').value = fc.roadTerm;
+        document.getElementById('feeServiceArea').value = fc.serviceArea;
+        document.getElementById('chkAutoBhvc').checked = !!fc.autoBhvc;
 
         renderPromoConfigPanel();
         renderCalculationsAndPromos();
@@ -2515,7 +3040,6 @@
           ['customerName', 'customerName'],
           ['quoteDate', 'quoteDate'],
           ['customerAddress', 'customerAddress'],
-          ['carModel', 'carModel'],
           ['representative', 'representative'],
           ['carColor', 'carColor'],
           ['customerDob', 'customerDob'],
@@ -2718,6 +3242,65 @@
           renderCostConfigPanel();
           renderCalculationsAndPromos();
           scheduleAutosave();
+        });
+
+        // Fee Calculator Controls
+        function syncAutoBhvcIfEnabled() {
+          if (!state.feeConfig?.autoBhvc) return;
+          const bd = calcStandardFeeBreakdown();
+          const bhvcItem = (state.costItems || []).find((it) => /vật chất/i.test(it.label || ''));
+          if (bhvcItem && bhvcItem.amount !== bd.bhvc.amount) {
+            bhvcItem.amount = bd.bhvc.amount;
+            renderCostRows();
+            renderCostConfigPanel();
+          }
+        }
+
+        const feeBindings = [
+          ['feeCustomerGroup', 'customerGroup'],
+          ['feeUsage', 'usage'],
+          ['feePlateArea', 'plateArea'],
+          ['feeInsurer', 'insurer'],
+          ['feeRoadTerm', 'roadTerm'],
+          ['feeServiceArea', 'serviceArea']
+        ];
+        feeBindings.forEach(([elId, key]) => {
+          document.getElementById(elId).addEventListener('change', (e) => {
+            if (!state.feeConfig) state.feeConfig = Object.assign({}, DEFAULT_FEE_CONFIG);
+            state.feeConfig[key] = e.target.value;
+            if (key === 'customerGroup') autoApplyTlx2Rate();
+            syncAutoBhvcIfEnabled();
+            renderCalculationsAndPromos();
+            scheduleAutosave();
+          });
+        });
+
+        document.getElementById('chkAutoBhvc').addEventListener('change', (e) => {
+          if (!state.feeConfig) state.feeConfig = Object.assign({}, DEFAULT_FEE_CONFIG);
+          state.feeConfig.autoBhvc = e.target.checked;
+          syncAutoBhvcIfEnabled();
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        document.getElementById('btnApplyStandardFees').addEventListener('click', applyStandardFeesToCosts);
+
+        // 2-way sync for Car Model dropdowns (A4 sheet + Right panel)
+        const handleCarModelChange = (newVal) => {
+          state.carModel = newVal;
+          setCarModelValue(newVal);
+          autoApplyTlx2Rate();
+          syncAutoBhvcIfEnabled();
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        };
+        document.getElementById('carModel').addEventListener('change', (e) => handleCarModelChange(e.target.value));
+        document.getElementById('feeCarModelSelect').addEventListener('change', (e) => handleCarModelChange(e.target.value));
+
+        // Also update BHVC when listPrice changes if autoBhvc is enabled
+        document.getElementById('listPrice').addEventListener('input', () => {
+          syncAutoBhvcIfEnabled();
+          renderCalculationsAndPromos();
         });
 
         bindMoneyInput(document.getElementById('listPrice'), (val) => {
@@ -3052,6 +3635,7 @@
       }
 
       function init() {
+        populateCarModelSelects();
         try {
           const saved = localStorage.getItem(STORAGE_AUTOSAVE);
           if (saved) {
