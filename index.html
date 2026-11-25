@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WORKSHEET — VINFAST NGỌC TƯỜNG</title>
+  <style>
+    :root {
+      /* Screen-only app chrome tokens */
+      --bg-desk: #dde2ea;
+      --border-chrome: #cbd5e1;
+      --ink-primary: #0f172a;
+      --ink-secondary: #334155;
+      --ink-muted: #64748b;
+      --accent: #1464f4;
+      --accent-hover: #0d51cc;
+      --accent-soft: #eff6ff;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --success: #15803d;
+      --success-soft: #f0fdf4;
+      --warning: #b45309;
+      --warning-soft: #fffbeb;
+
+      /* Official Form Tokens (Exact match to standard printout) */
+      --form-peach: #FCE4D6;
+      --form-border: #000000;
+
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+      --shadow-sheet:
+        0 1px 3px rgba(15, 23, 42, 0.12),
+        0 10px 28px -4px rgba(15, 23, 42, 0.16);
+      --shadow-panel:
+        0 1px 2px rgba(15, 23, 42, 0.05),
+        0 6px 20px -4px rgba(15, 23, 42, 0.08);
+      --shadow-float:
+        0 2px 6px rgba(15, 23, 42, 0.08),
+        0 12px 28px -6px rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      color: var(--ink-primary);
+      background: var(--bg-desk);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ======================== TOP APP TOOLBAR (NO-PRINT) ======================== */
+    .app-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-chrome);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink-primary);
+      white-space: nowrap;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--ink-primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .autosave-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .autosave-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    .autosave-pill.saving .autosave-dot {
+      background: #f59e0b;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-chrome);
+      background: #ffffff;
+      color: var(--ink-primary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.2;
+      transition: transform 150ms var(--ease-out), background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+      user-select: none;
+    }
+
+    .btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+      }
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+      }
+    }
+
+    .btn-dark {
+      background: var(--ink-primary);
+      border-color: var(--ink-primary);
+      color: #ffffff;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-dark:hover {
+        background: #1e293b;
+        border-color: #1e293b;
+      }
+    }
+
+    .btn-danger-ghost {
+      color: var(--danger);
+      border-color: transparent;
+      background: transparent;
+      padding: 4px 7px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-danger-ghost:hover {
+        background: var(--danger-soft);
+        border-color: #fecaca;
+      }
+    }
+
+    .btn-sm {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    .count-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .status-select {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border-chrome);
+      background: #ffffff;
+      color: var(--ink-primary);
+      cursor: pointer;
+    }
+
+    /* ======================== WORKSPACE LAYOUT ======================== */
+    .workspace {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 22px;
+      padding: 20px 20px 48px;
+      max-width: 1460px;
+      margin: 0 auto;
+    }
+
+    /* ======================== IMPROVED HELPER TOOL PANEL ======================== */
+    .helper-panel {
+      width: 375px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 68px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: calc(100vh - 86px);
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .tool-card {
+      background: #ffffff;
+      border: 1px solid var(--border-chrome);
+      border-radius: 11px;
+      box-shadow: var(--shadow-panel);
+      overflow: hidden;
+    }
+
+    .tool-card-head {
+      padding: 11px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tool-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tool-card-title svg {
+      width: 15px;
+      height: 15px;
+      color: var(--accent);
+    }
+
+    .tool-card-body {
+      padding: 13px 14px;
+    }
+
+    /* Summary Table inside Helper Panel */
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .summary-row .label {
+      color: var(--ink-secondary);
+    }
+
+    .summary-row .val {
+      font-weight: 700;
+      color: var(--ink-primary);
+      font-size: 13.5px;
+    }
+
+    .summary-row.discount .val {
+      color: var(--danger);
+    }
+
+    .summary-onroad-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      border: 1px solid #bfdbfe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-onroad-box .label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .summary-onroad-box .val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    /* Promo Config Cards */
+    .promo-hint {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      line-height: 1.4;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 7px;
+      padding: 7px 10px;
+    }
+
+    .promo-config-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .promo-config-item {
+      border: 1px solid #cbd5e1;
+      border-left: 3.5px solid var(--success);
+      border-radius: 8px;
+      padding: 10px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .promo-config-item.excluded {
+      border-left-color: #94a3b8;
+      background: #f8fafc;
+    }
+
+    .promo-top-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .promo-idx-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+
+    .promo-name-input {
+      flex: 1;
+      min-width: 0;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .promo-name-input:focus,
+    .promo-type-select:focus,
+    .promo-val-input:focus {
+      border-color: var(--accent);
+    }
+
+    .promo-mid-row {
+      display: grid;
+      grid-template-columns: 115px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .promo-type-select {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 7px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .promo-val-input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+      padding: 6px 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .promo-gift-note {
+      font-size: 12px;
+      color: var(--ink-muted);
+      text-align: right;
+      padding-right: 4px;
+      font-style: italic;
+    }
+
+    .promo-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+      gap: 8px;
+    }
+
+    .check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 12.5px;
+      color: var(--ink-secondary);
+      font-weight: 500;
+    }
+
+    .check-label input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .promo-impact-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .promo-impact-badge.active {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .promo-impact-badge.inactive {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .tool-option-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tool-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* ============================================================================
+       OFFICIAL STANDARD PRINT FORM — EXACT MATCH TO UPLOADED PRINTOUT
+       Times New Roman | #FCE4D6 Peach Banners | 2px Outer / 1px Inner Borders
+       Zero Text Cropping (Auto-wrapping textareas on all text fields)
+       ============================================================================ */
+    .sheet-viewport {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      min-width: 0;
+      overflow-x: auto;
+      padding-bottom: 12px;
+    }
+
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      color: #000000;
+      padding: 8mm 8mm 8mm 8mm;
+      box-shadow: var(--shadow-sheet);
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      line-height: 1.22;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Editable inputs & auto-grow textareas inside the official sheet */
+    .f-input,
+    .f-textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9.8pt;
+      color: #000000;
+      padding: 1px 2px;
+      margin: 0;
+      outline: none;
+      line-height: 1.22;
+    }
+
+    .f-textarea {
+      resize: none;
+      overflow: hidden;
+      display: block;
+      text-align: center;
+      font-weight: 700;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .f-textarea.compact {
+      font-size: 9.2pt;
+      line-height: 1.18;
+    }
+
+    .f-textarea.link-blue {
+      color: #0563C1;
+      text-decoration: underline;
+      font-weight: 400;
+      font-size: 9.4pt;
+    }
+
+    .f-input.b { font-weight: 700; }
+    .f-input.c { text-align: center; }
+    .f-input.r { text-align: right; }
+
+    .f-input:focus,
+    .f-textarea:focus,
+    .hdr-tvbh-input:focus {
+      background: #eff6ff;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .f-input:hover:not(:focus),
+      .f-textarea:hover:not(:focus),
+      .hdr-tvbh-input:hover:not(:focus) {
+        background: rgba(20, 100, 244, 0.06);
+      }
+    }
+
+    /* 1. TOP HEADER BANNER */
+    .std-header {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--form-border);
+      background: var(--form-peach);
+      margin-bottom: 6px;
+      table-layout: fixed;
+    }
+
+    .std-header td {
+      border: 1px solid var(--form-border);
+      background: var(--form-peach);
+      text-align: center;
+      vertical-align: middle;
+      padding: 2px 4px;
+    }
+
+    .hdr-worksheet {
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      padding: 3px 4px !important;
+    }
+
+    .hdr-tvbh-lbl {
+      font-size: 11pt;
+      font-weight: 700;
+    }
+
+    .hdr-subtitle {
+      font-size: 10pt;
+      font-weight: 400;
+      padding: 2px 4px !important;
+    }
+
+    .hdr-tvbh-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11.5pt;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      color: #000000;
+      outline: none;
+      padding: 1px 2px;
+    }
+
+    /* 2. TWO-COLUMN SPLIT CONTAINER (60.5% Left | 1.2% Gutter | 38.3% Right) */
+    .split-row {
+      display: grid;
+      grid-template-columns: 60.5% 38.3%;
+      justify-content: space-between;
+      align-items: stretch;
+      margin-bottom: 10px;
+    }
+
+    .split-row.top-align {
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .std-box {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--form-border);
+      table-layout: fixed;
+    }
+
+    .std-box td,
+    .std-box th {
+      border: 1px solid var(--form-border);
+      padding: 2.5px 4px;
+      vertical-align: middle;
+      font-size: 9.6pt;
+    }
+
+    .std-box td.lbl {
+      text-align: left;
+      font-weight: 400;
+      white-space: nowrap;
+      font-size: 9.3pt;
+    }
+
+    .std-box td.val-c {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .std-peach {
+      background: var(--form-peach);
+      font-weight: 700;
+      text-align: center;
+      padding: 3.5px 6px !important;
+      font-size: 10.5pt !important;
+    }
+
+    /* Payment Method 2-cell inside row */
+    .pay-split-cell {
+      padding: 0 !important;
+    }
+
+    .pay-split-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      height: 100%;
+    }
+
+    .pay-choice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 2.5px 2px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      font-size: 9.2pt;
+      white-space: nowrap;
+    }
+
+    .pay-choice:first-child {
+      border-right: 1px solid var(--form-border);
+    }
+
+    .pay-symbol {
+      font-family: 'Segoe UI Symbol', 'DejaVu Sans', sans-serif;
+      font-size: 10pt;
+      line-height: 1;
+    }
+
+    /* Left: CHI PHÍ LIÊN QUAN */
+    .cost-stt {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .cost-total-lbl {
+      font-weight: 700;
+      text-align: left;
+    }
+
+    /* Right: DEALING / GÚT GIÁ + CLOSING PRICE */
+    .promo-title-cell {
+      font-weight: 700;
+      text-align: left;
+      border-bottom: none !important;
+      padding-bottom: 4px !important;
+    }
+
+    .promo-body-cell {
+      border-top: none !important;
+      vertical-align: top !important;
+      padding: 2px 6px 6px 6px !important;
+      height: 122px;
+    }
+
+    .promo-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 9.3pt;
+      line-height: 1.52;
+    }
+
+    .promo-line-amt {
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .closing-header-cell {
+      background: var(--form-peach);
+      font-weight: 700;
+      text-align: center;
+      border-top: 2px solid var(--form-border) !important;
+      padding: 3.5px 6px !important;
+      font-size: 10.2pt !important;
+    }
+
+    .closing-val-cell {
+      text-align: center;
+      font-size: 15.5pt !important;
+      font-weight: 700;
+      padding: 6px 4px !important;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Payment term / THANH TOÁN */
+    .payterm-box {
+      margin-top: 7px;
+    }
+
+    .payterm-lbl {
+      text-align: center;
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    /* Signatures KHÁCH HÀNG / TƯ VẤN BÁN HÀNG */
+    .sig-row-top {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .sig-cell {
+      text-align: center;
+      font-weight: 700;
+      font-size: 10pt;
+      height: 22mm;
+    }
+
+    /* Bottom Internal Blocks */
+    .banner-bar {
+      width: 100%;
+      border: 2px solid var(--form-border);
+      background: var(--form-peach);
+      padding: 3px 6px;
+      font-weight: 700;
+      font-size: 10.5pt;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .comm-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--form-border);
+      border-top: none;
+      margin-bottom: 7px;
+      table-layout: fixed;
+    }
+
+    .comm-table th,
+    .comm-table td {
+      border: 1px solid var(--form-border);
+      padding: 2.5px 5px;
+      font-size: 9.5pt;
+      vertical-align: middle;
+    }
+
+    .comm-table th {
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .comm-table tbody td {
+      height: 21px;
+    }
+
+    .bonus-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--form-border);
+      border-top: none;
+      margin-bottom: 8px;
+      table-layout: fixed;
+    }
+
+    .bonus-table td {
+      border: 1px solid var(--form-border);
+      padding: 2.5px 6px;
+      font-size: 9.5pt;
+      vertical-align: middle;
+    }
+
+    .sig-row-bottom {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      margin-top: 4px;
+    }
+
+    .sig-cell-bottom {
+      text-align: center;
+      font-weight: 700;
+      font-size: 10pt;
+      height: 18mm;
+    }
+
+    .print-only-date {
+      display: none;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* ======================== SLIDE-OVER DRAWER (SAVED PROGRESS) ======================== */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      z-index: 60;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms var(--ease-out);
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 430px;
+      max-width: 94vw;
+      background: #ffffff;
+      z-index: 70;
+      box-shadow: -8px 0 32px rgba(15, 23, 42, 0.16);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 280ms var(--ease-drawer);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .drawer-tools {
+      padding: 12px 18px;
+      border-bottom: 1px solid #eef2f6;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #f8fafc;
+    }
+
+    .search-input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ink-secondary);
+      cursor: pointer;
+      transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+
+    .filter-pill.active {
+      background: var(--ink-primary);
+      border-color: var(--ink-primary);
+      color: #ffffff;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .record-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 11px 12px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 150ms ease;
+    }
+
+    .record-card.active-record {
+      border-color: var(--accent);
+      background: #f8fbff;
+    }
+
+    .record-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .record-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .status-chip {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status-draft { background: #f1f5f9; color: #475569; }
+    .status-dealing { background: var(--warning-soft); color: var(--warning); }
+    .status-deposited { background: var(--accent-soft); color: var(--accent); }
+    .status-approved { background: var(--success-soft); color: var(--success); }
+
+    .record-meta {
+      font-size: 12px;
+      color: var(--ink-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .record-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 2px;
+      padding-top: 6px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .drawer-footer {
+      padding: 12px 18px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--ink-muted);
+      font-size: 13px;
+    }
+
+    /* ======================== TOAST ======================== */
+    .toast-stack {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--ink-primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-float);
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+      transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+      pointer-events: auto;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @media (max-width: 1240px) {
+      .workspace {
+        flex-direction: column;
+        align-items: center;
+      }
+      .helper-panel {
+        width: 210mm;
+        max-width: 100%;
+        position: static;
+        max-height: none;
+      }
+      .sheet-viewport {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    /* ======================== EXACT A4 PRINT LOCK ======================== */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .no-print,
+      .app-toolbar,
+      .helper-panel,
+      .drawer,
+      .drawer-backdrop,
+      .toast-stack {
+        display: none !important;
+      }
+
+      .workspace,
+      .sheet-viewport {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
+        overflow: visible !important;
+      }
+
+      .a4-sheet {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        margin: 0 !important;
+        padding: 8mm 8mm 8mm 8mm !important;
+        box-shadow: none !important;
+      }
+
+      .f-input,
+      .f-textarea,
+      .hdr-tvbh-input {
+        background: transparent !important;
+      }
+
+      .date-picker-screen {
+        display: none !important;
+      }
+
+      .print-only-date {
+        display: inline-block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ======================== TOP TOOLBAR (SCREEN ONLY) ======================== -->
+  <header class="app-toolbar no-print">
+    <div class="toolbar-left">
+      <div class="brand-mark">
+        <span class="brand-badge">VF</span>
+        <span>WORKSHEET — VINFAST NGỌC TƯỜNG</span>
+      </div>
+      <span id="autosavePill" class="autosave-pill">
+        <span class="autosave-dot"></span>
+        <span id="autosaveText">Sẵn sàng</span>
+      </span>
+    </div>
+
+    <div class="toolbar-actions">
+      <select id="recordStatusSelect" class="status-select" title="Trạng thái tiến trình">
+        <option value="draft">Trạng thái: Bản nháp</option>
+        <option value="dealing" selected>Trạng thái: Đang gút giá</option>
+        <option value="deposited">Trạng thái: Đã chốt cọc</option>
+        <option value="approved">Trạng thái: Đã ký duyệt</option>
+      </select>
+      <button type="button" class="btn" id="btnNewForm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Tạo mới</span>
+      </button>
+      <button type="button" class="btn" id="btnLoadSample">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span>Dữ liệu mẫu</span>
+      </button>
+      <button type="button" class="btn btn-primary" id="btnSaveProgress" title="Lưu tiến trình (Ctrl+S)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Lưu tiến trình</span>
+      </button>
+      <button type="button" class="btn" id="btnOpenDrawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Lấy tiến trình</span>
+        <span id="savedCountBadge" class="count-badge">0</span>
+      </button>
+      <button type="button" class="btn btn-dark" id="btnPrint" title="In đúng form chuẩn A4 (Ctrl+P)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>In / Xuất PDF A4</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================== WORKSPACE ======================== -->
+  <main class="workspace">
+    <!-- EXACT OFFICIAL STANDARD A4 PRINT FORM -->
+    <div class="sheet-viewport">
+      <section id="a4Sheet" class="a4-sheet" aria-label="Form chuẩn WORKSHEET VinFast Ngọc Tường">
+
+        <!-- 1. HEADER BANNER -->
+        <table class="std-header">
+          <colgroup>
+            <col style="width: 60.5%;" />
+            <col style="width: 39.5%;" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="hdr-worksheet">WORKSHEET</td>
+              <td class="hdr-tvbh-lbl">Tên TVBH</td>
+            </tr>
+            <tr>
+              <td class="hdr-subtitle">Bản phác thảo VINFAST NGỌC TƯỜNG</td>
+              <td><input id="tvbhName" class="hdr-tvbh-input" type="text" placeholder="HỌ TÊN TVBH" /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 2. CUSTOMER INFO (LEFT 60.5%) & QUOTE/VEHICLE INFO (RIGHT 38.3%) -->
+        <div class="split-row">
+          <!-- Left Box (23% lbl | 16% date | 61% issuePlace -> ZERO CROPPING) -->
+          <table class="std-box">
+            <colgroup>
+              <col style="width: 23%;" />
+              <col style="width: 16%;" />
+              <col style="width: 61%;" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td class="lbl">Tên khách hàng:</td>
+                <td colspan="2" class="val-c"><textarea id="customerName" class="f-textarea auto-grow" rows="1"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">Địa chỉ:</td>
+                <td colspan="2" class="val-c"><textarea id="customerAddress" class="f-textarea auto-grow" rows="2"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">Người đại diện:</td>
+                <td colspan="2" class="val-c"><textarea id="representative" class="f-textarea auto-grow" rows="1"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">Ngày sinh:</td>
+                <td colspan="2" class="val-c"><input id="customerDob" class="f-input b c" type="text" /></td>
+              </tr>
+              <tr>
+                <td class="lbl">Điện thoại /Email:</td>
+                <td colspan="2" class="val-c"><textarea id="customerContact" class="f-textarea auto-grow link-blue" rows="1"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">CMND/Mã số thuế:</td>
+                <td colspan="2" class="val-c"><input id="customerIdNumber" class="f-input b c tabular" type="text" /></td>
+              </tr>
+              <tr>
+                <td class="lbl">Ngày cấp/Nơi cấp:</td>
+                <td class="val-c"><input id="idIssueDate" class="f-input b c tabular" type="text" placeholder="dd/mm/yyyy" /></td>
+                <td class="val-c"><textarea id="idIssuePlace" class="f-textarea auto-grow compact" rows="1"></textarea></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Right Box -->
+          <table class="std-box">
+            <colgroup>
+              <col style="width: 45%;" />
+              <col style="width: 55%;" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td class="lbl">Ngày báo giá:</td>
+                <td class="val-c">
+                  <input id="quoteDate" class="f-input b c date-picker-screen" type="date" />
+                  <span id="quoteDatePrint" class="print-only-date"></span>
+                </td>
+              </tr>
+              <tr>
+                <td class="lbl">Loại xe:</td>
+                <td class="val-c">
+                  <input id="carModel" class="f-input b c" type="text" list="vinfastModels" />
+                  <datalist id="vinfastModels">
+                    <option value="MPV7"></option>
+                    <option value="VF 3"></option>
+                    <option value="VF 5 Plus"></option>
+                    <option value="VF 6 Eco"></option>
+                    <option value="VF 6 Plus"></option>
+                    <option value="VF 7 Eco"></option>
+                    <option value="VF 7 Plus"></option>
+                    <option value="VF 8 Eco"></option>
+                    <option value="VF 8 Plus"></option>
+                    <option value="VF 9 Eco"></option>
+                    <option value="VF 9 Plus"></option>
+                    <option value="Minio Green"></option>
+                    <option value="Herio Green"></option>
+                    <option value="Nerio Green"></option>
+                    <option value="Limo Green"></option>
+                  </datalist>
+                </td>
+              </tr>
+              <tr>
+                <td class="lbl">Màu xe:</td>
+                <td class="val-c"><textarea id="carColor" class="f-textarea auto-grow" rows="1"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">Dự kiến TG giao xe:</td>
+                <td class="val-c"><input id="deliveryTime" class="f-input b c" type="text" /></td>
+              </tr>
+              <tr>
+                <td class="lbl">Địa điểm giao xe:</td>
+                <td class="val-c"><textarea id="deliveryLocation" class="f-textarea auto-grow" rows="1"></textarea></td>
+              </tr>
+              <tr>
+                <td class="lbl">Phương thức thanh toán:</td>
+                <td class="pay-split-cell">
+                  <div class="pay-split-inner" role="radiogroup" aria-label="Phương thức thanh toán">
+                    <span class="pay-choice" data-pay="installment" tabindex="0" role="radio" aria-checked="true">
+                      <span>Trả góp</span>
+                      <span id="payBoxInstallment" class="pay-symbol">☒</span>
+                    </span>
+                    <span class="pay-choice" data-pay="cash" tabindex="0" role="radio" aria-checked="false">
+                      <span>Tiền mặt</span>
+                      <span id="payBoxCash" class="pay-symbol">☐</span>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="height: 22px;">&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3. CHI PHÍ LIÊN QUAN (LEFT 60.5%) & DEALING / CLOSING / THANH TOÁN (RIGHT 38.3%) -->
+        <div class="split-row top-align">
+          <!-- Left: CHI PHÍ LIÊN QUAN -->
+          <table class="std-box">
+            <colgroup>
+              <col style="width: 7%;" />
+              <col style="width: 39%;" />
+              <col style="width: 54%;" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colspan="3" class="std-peach">CHI PHÍ LIÊN QUAN</td>
+              </tr>
+              <tr>
+                <td class="cost-stt">1</td>
+                <td>Thuế trước bạ</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="tax" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">2</td>
+                <td>Phí đăng ký biển số</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="plate" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">3</td>
+                <td>Lệ phí đăng kiểm</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="inspection" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">4</td>
+                <td>Bảo hiểm TNDS</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="civilIns" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">5</td>
+                <td>Bảo hiểm vật chất</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="bodyIns" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">6</td>
+                <td>Phí bảo trì đường bộ (12 tháng)</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="roadFee" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td class="cost-stt">7</td>
+                <td>Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)</td>
+                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="serviceFee" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td colspan="2" class="cost-total-lbl">Tổng chi phí liên quan</td>
+                <td class="val-c tabular" id="totalRelatedCosts">0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Right: DEALING / GÚT GIÁ + CLOSING PRICE + PAYMENT TERM -->
+          <div>
+            <table class="std-box">
+              <colgroup>
+                <col style="width: 44%;" />
+                <col style="width: 56%;" />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td colspan="2" class="std-peach">DEALING / GÚT GIÁ</td>
+                </tr>
+                <tr>
+                  <td>Giá công bố</td>
+                  <td class="val-c"><input id="listPrice" class="f-input b c tabular" type="text" inputmode="numeric" /></td>
+                </tr>
+                <tr>
+                  <td>Giảm giá</td>
+                  <td class="val-c tabular" id="totalDiscountDisplay">0</td>
+                </tr>
+                <tr>
+                  <td>Giá thực hiện</td>
+                  <td class="val-c tabular" id="netPriceDisplay">0</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="promo-title-cell">Hạng mục hỗ trợ đặc biệt</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="promo-body-cell">
+                    <div id="promoDisplayList"></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="closing-header-cell">CLOSING PRICE / GIÁ ĐÓNG DEAL</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="closing-val-cell" id="closingPriceDisplay">0</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="std-box payterm-box">
+              <colgroup>
+                <col style="width: 44%;" />
+                <col style="width: 56%;" />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td colspan="2" class="std-peach">Payment term / THANH TOÁN</td>
+                </tr>
+                <tr>
+                  <td class="payterm-lbl">Đặt cọc</td>
+                  <td style="text-align: center;"><input id="payDeposit" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                </tr>
+                <tr>
+                  <td class="payterm-lbl">Lần 2</td>
+                  <td style="text-align: center;"><input id="paySecond" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                </tr>
+                <tr>
+                  <td class="payterm-lbl">Còn lại</td>
+                  <td style="text-align: center;"><input id="payRemaining" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. SIGNATURES: KHÁCH HÀNG & TƯ VẤN BÁN HÀNG -->
+        <div class="sig-row-top">
+          <div class="sig-cell">KHÁCH HÀNG</div>
+          <div class="sig-cell">TƯ VẤN BÁN HÀNG</div>
+        </div>
+
+        <!-- 5. CHI HOA HỒNG -->
+        <div class="banner-bar">CHI HOA HỒNG</div>
+        <table class="comm-table">
+          <colgroup>
+            <col style="width: 34%;" />
+            <col style="width: 22%;" />
+            <col style="width: 22%;" />
+            <col style="width: 22%;" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Tên người nhận<br />hoa hồng</th>
+              <th>Số tiền</th>
+              <th>CCCD</th>
+              <th>Số điện thoại</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><textarea id="commName1" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
+              <td><input id="commAmt1" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+              <td><input id="commCccd1" class="f-input c tabular" type="text" /></td>
+              <td><input id="commPhone1" class="f-input c tabular" type="text" /></td>
+            </tr>
+            <tr>
+              <td><textarea id="commName2" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
+              <td><input id="commAmt2" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+              <td><input id="commCccd2" class="f-input c tabular" type="text" /></td>
+              <td><input id="commPhone2" class="f-input c tabular" type="text" /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 6. THƯỞNG TƯ VẤN BÁN HÀNG -->
+        <div class="banner-bar">THƯỞNG TƯ VẤN BÁN HÀNG</div>
+        <table class="bonus-table">
+          <colgroup>
+            <col style="width: 24%;" />
+            <col style="width: 26%;" />
+            <col style="width: 20%;" />
+            <col style="width: 30%;" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Chênh lệch giá tốt</td>
+              <td><input id="bonusPriceDiff" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+              <td style="font-weight: 700;">Thưởng nóng</td>
+              <td><input id="bonusHot" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Lương năng suất</td>
+              <td colspan="3"><input id="bonusProductivity" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 7. SIGNATURES: TỔNG GIÁM ĐỐC & GIÁM ĐỐC KINH DOANH -->
+        <div class="sig-row-bottom">
+          <div class="sig-cell-bottom">Tổng Giám Đốc</div>
+          <div class="sig-cell-bottom">Giám Đốc Kinh Doanh</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================== IMPROVED RIGHT CONTROL PANEL (NEVER PRINTED) ======================== -->
+    <aside class="helper-panel no-print" aria-label="Bảng công cụ tùy chỉnh (không in)">
+      <!-- Card 1: Tóm tắt tài chính -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+            <span>Tóm tắt tài chính</span>
+          </div>
+          <span style="font-size: 11.5px; color: var(--ink-muted); font-weight: 600;">VNĐ</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="summary-list">
+            <div class="summary-row">
+              <span class="label">Giá công bố</span>
+              <span class="val tabular" id="sumListPrice">0</span>
+            </div>
+            <div class="summary-row discount">
+              <span class="label">Tổng giảm trừ vào giá</span>
+              <span class="val tabular" id="sumDiscount">-0</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Giá đóng deal (Closing)</span>
+              <span class="val tabular" id="sumClosing">0</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Tổng chi phí liên quan</span>
+              <span class="val tabular" id="sumRelated">0</span>
+            </div>
+          </div>
+          <div class="summary-onroad-box">
+            <span class="label">Tổng lăn bánh dự kiến</span>
+            <span class="val tabular" id="sumOnRoad">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Điều chỉnh Ưu đãi / Gút giá -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>Hạng mục hỗ trợ &amp; Gút giá</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary" id="btnAddPromo">+ Thêm mục</button>
+        </div>
+        <div class="tool-card-body">
+          <div class="promo-hint">
+            Tích <strong>Không trừ vào giá</strong> nếu hạng mục chỉ hiển thị trên phiếu mà không cộng vào <em>Giảm giá</em> (như cột <code>x</code> trên Excel).
+          </div>
+          <div id="promoConfigList" class="promo-config-list"></div>
+        </div>
+      </div>
+
+      <!-- Card 3: Tùy chọn & Sao lưu -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Tùy chọn &amp; Sao lưu dữ liệu</span>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-option-stack">
+            <label class="check-label" for="chkAutoRemaining">
+              <input type="checkbox" id="chkAutoRemaining" />
+              <span>Tự tính mục <strong>Còn lại</strong> (Giá đóng deal − Đặt cọc − Lần 2)</span>
+            </label>
+            <div class="tool-btn-grid">
+              <button type="button" class="btn btn-sm" id="btnExportCurrentJson">Xuất JSON phiếu</button>
+              <button type="button" class="btn btn-sm" id="btnImportJson">Nhập file JSON</button>
+              <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ======================== SAVED PROGRESS DRAWER ======================== -->
+  <div id="drawerBackdrop" class="drawer-backdrop no-print"></div>
+  <aside id="progressDrawer" class="drawer no-print" aria-label="Danh sách tiến trình đã lưu">
+    <div class="drawer-header">
+      <div>
+        <h2>Tiến trình đã lưu</h2>
+        <div style="font-size: 12px; color: var(--ink-muted);" id="drawerSubtitle">Lưu trữ cục bộ trên trình duyệt</div>
+      </div>
+      <button type="button" class="btn btn-sm" id="btnCloseDrawer">Đóng</button>
+    </div>
+
+    <div class="drawer-tools">
+      <input id="recordSearch" class="search-input" type="search" placeholder="Tìm tên khách hàng, SĐT, loại xe, TVBH..." />
+      <div class="filter-pills" id="statusFilterPills">
+        <button type="button" class="filter-pill active" data-filter="all">Tất cả</button>
+        <button type="button" class="filter-pill" data-filter="draft">Bản nháp</button>
+        <button type="button" class="filter-pill" data-filter="dealing">Đang gút giá</button>
+        <button type="button" class="filter-pill" data-filter="deposited">Đã chốt cọc</button>
+        <button type="button" class="filter-pill" data-filter="approved">Đã ký duyệt</button>
+      </div>
+    </div>
+
+    <div id="recordsList" class="drawer-body"></div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-sm" id="btnSaveAsNew">Lưu thành bản mới</button>
+      <button type="button" class="btn btn-sm" id="btnExportAllJson">Sao lưu tất cả (.json)</button>
+    </div>
+  </aside>
+
+  <div id="toastStack" class="toast-stack no-print" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_AUTOSAVE = 'vf_worksheet_autosave_v4';
+      const STORAGE_RECORDS = 'vf_worksheet_records_v1';
+
+      const STATUS_META = {
+        draft: { label: 'Bản nháp', cls: 'status-draft' },
+        dealing: { label: 'Đang gút giá', cls: 'status-dealing' },
+        deposited: { label: 'Đã chốt cọc', cls: 'status-deposited' },
+        approved: { label: 'Đã ký duyệt', cls: 'status-approved' }
+      };
+
+      function createSampleState() {
+        return {
+          recordId: null,
+          status: 'dealing',
+          tvbhName: 'PHẠM NGỌC HUY',
+          customerName: 'PHẠM THỊ NGỌC NHUNG',
+          quoteDate: '2026-11-25',
+          customerAddress: 'Số Nhà 519, Tổ 2, Thôn Lập Sơn, Xã Tân Lập,\nTỉnh Lâm Đồng',
+          carModel: 'MPV7',
+          representative: '',
+          carColor: 'Đen/Nội Thất Nâu',
+          customerDob: '28/02/2002',
+          deliveryTime: 'Tháng 11.2026',
+          customerContact: '0889281187/vanninh410@gmail.com',
+          deliveryLocation: 'Showroom Phan Thiết',
+          customerIdNumber: '060302007062',
+          paymentMethod: 'installment',
+          idIssueDate: '10/5/2021',
+          idIssuePlace: 'Cục Trưởng Cục Cảnh Sát QLHC Về TTXH',
+          costs: {
+            tax: 0,
+            plate: 140000,
+            inspection: 99000,
+            civilIns: 1013400,
+            bodyIns: 7569000,
+            roadFee: 1560000,
+            serviceFee: 4000000
+          },
+          listPrice: 750000000,
+          promos: [
+            {
+              id: 'p1',
+              name: 'Mãnh liệt vì tương lai xanh 2',
+              type: 'percent',
+              value: 9,
+              excludeDiscount: false,
+              showOnPrint: true
+            },
+            {
+              id: 'p2',
+              name: 'Giảm tiền mặt',
+              type: 'fixed',
+              value: 30000000,
+              excludeDiscount: false,
+              showOnPrint: true
+            },
+            {
+              id: 'p3',
+              name: 'Quy đổi 2 năm bảo hiểm vật chất',
+              type: 'fixed',
+              value: 15000000,
+              excludeDiscount: true,
+              showOnPrint: true
+            },
+            {
+              id: 'p4',
+              name: 'Tặng Camera 360',
+              type: 'gift',
+              value: 0,
+              excludeDiscount: true,
+              showOnPrint: true
+            }
+          ],
+          payDeposit: 5000000,
+          paySecond: null,
+          payRemaining: null,
+          autoRemaining: false,
+          commissions: [
+            { name: '', amount: null, cccd: '', phone: '' },
+            { name: '', amount: null, cccd: '', phone: '' }
+          ],
+          bonusPriceDiff: null,
+          bonusHot: null,
+          bonusProductivity: null
+        };
+      }
+
+      function createBlankState() {
+        const today = new Date();
+        const isoToday = today.getFullYear() + '-' +
+          String(today.getMonth() + 1).padStart(2, '0') + '-' +
+          String(today.getDate()).padStart(2, '0');
+        return {
+          recordId: null,
+          status: 'draft',
+          tvbhName: '',
+          customerName: '',
+          quoteDate: isoToday,
+          customerAddress: '',
+          carModel: '',
+          representative: '',
+          carColor: '',
+          customerDob: '',
+          deliveryTime: '',
+          customerContact: '',
+          deliveryLocation: 'Showroom Phan Thiết',
+          customerIdNumber: '',
+          paymentMethod: 'installment',
+          idIssueDate: '',
+          idIssuePlace: 'Cục Trưởng Cục Cảnh Sát QLHC Về TTXH',
+          costs: {
+            tax: 0,
+            plate: 0,
+            inspection: 0,
+            civilIns: 0,
+            bodyIns: 0,
+            roadFee: 0,
+            serviceFee: 0
+          },
+          listPrice: 0,
+          promos: [
+            {
+              id: 'p1',
+              name: 'Mãnh liệt vì tương lai xanh 2',
+              type: 'percent',
+              value: 9,
+              excludeDiscount: false,
+              showOnPrint: true
+            },
+            {
+              id: 'p2',
+              name: 'Giảm tiền mặt',
+              type: 'fixed',
+              value: 0,
+              excludeDiscount: false,
+              showOnPrint: true
+            }
+          ],
+          payDeposit: null,
+          paySecond: null,
+          payRemaining: null,
+          autoRemaining: false,
+          commissions: [
+            { name: '', amount: null, cccd: '', phone: '' },
+            { name: '', amount: null, cccd: '', phone: '' }
+          ],
+          bonusPriceDiff: null,
+          bonusHot: null,
+          bonusProductivity: null
+        };
+      }
+
+      let state = createSampleState();
+      let activeFilter = 'all';
+      let autosaveTimer = null;
+
+      function parseMoney(str) {
+        if (str === null || str === undefined || str === '') return null;
+        if (typeof str === 'number') return Number.isFinite(str) ? Math.round(str) : null;
+        const cleaned = String(str).replace(/[^\d-]/g, '');
+        if (!cleaned || cleaned === '-') return null;
+        const n = parseInt(cleaned, 10);
+        return Number.isNaN(n) ? null : n;
+      }
+
+      function formatMoney(num, emptyZero = false) {
+        if (num === null || num === undefined || Number.isNaN(num)) return '';
+        if (emptyZero && num === 0) return '';
+        return Math.round(num).toLocaleString('en-US');
+      }
+
+      function formatDateVN(iso) {
+        if (!iso) return '';
+        const parts = iso.split('-');
+        if (parts.length !== 3) return iso;
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+
+      function uid() {
+        return 'ws_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+      }
+
+      function escapeAttr(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      function showToast(msg) {
+        const stack = document.getElementById('toastStack');
+        const el = document.createElement('div');
+        el.className = 'toast';
+        el.textContent = msg;
+        stack.appendChild(el);
+        requestAnimationFrame(() => el.classList.add('visible'));
+        setTimeout(() => {
+          el.classList.remove('visible');
+          setTimeout(() => el.remove(), 220);
+        }, 2500);
+      }
+
+      function autoResizeTextarea(el) {
+        if (!el) return;
+        el.style.height = 'auto';
+        const minH = el.id === 'customerAddress' ? 30 : 18;
+        el.style.height = Math.max(minH, el.scrollHeight) + 'px';
+      }
+
+      function autoResizeAllTextareas() {
+        document.querySelectorAll('textarea.auto-grow').forEach(autoResizeTextarea);
+      }
+
+      function calcPromoAmount(promo, listPrice) {
+        if (promo.type === 'percent') {
+          const pct = parseFloat(promo.value) || 0;
+          return Math.round((listPrice || 0) * (pct / 100));
+        }
+        if (promo.type === 'fixed') {
+          return parseMoney(promo.value) || 0;
+        }
+        return 0;
+      }
+
+      function computeTotals() {
+        const c = state.costs;
+        const totalRelated =
+          (c.tax || 0) +
+          (c.plate || 0) +
+          (c.inspection || 0) +
+          (c.civilIns || 0) +
+          (c.bodyIns || 0) +
+          (c.roadFee || 0) +
+          (c.serviceFee || 0);
+
+        const listPrice = state.listPrice || 0;
+        let totalDiscount = 0;
+        state.promos.forEach((p) => {
+          const amt = calcPromoAmount(p, listPrice);
+          if (!p.excludeDiscount && p.type !== 'gift') {
+            totalDiscount += amt;
+          }
+        });
+
+        const netPrice = Math.max(0, listPrice - totalDiscount);
+        const closingPrice = netPrice;
+        const onRoad = closingPrice + totalRelated;
+
+        return { totalRelated, listPrice, totalDiscount, netPrice, closingPrice, onRoad };
+      }
+
+      function renderCalculationsAndPromos() {
+        const totals = computeTotals();
+
+        document.getElementById('totalRelatedCosts').textContent = formatMoney(totals.totalRelated);
+        document.getElementById('totalDiscountDisplay').textContent = formatMoney(totals.totalDiscount);
+        document.getElementById('netPriceDisplay').textContent = formatMoney(totals.netPrice);
+        document.getElementById('closingPriceDisplay').textContent = formatMoney(totals.closingPrice);
+
+        document.getElementById('sumListPrice').textContent = formatMoney(totals.listPrice);
+        document.getElementById('sumDiscount').textContent = totals.totalDiscount > 0 ? '-' + formatMoney(totals.totalDiscount) : '0';
+        document.getElementById('sumClosing').textContent = formatMoney(totals.closingPrice);
+        document.getElementById('sumRelated').textContent = formatMoney(totals.totalRelated);
+        document.getElementById('sumOnRoad').textContent = formatMoney(totals.onRoad);
+
+        const remInput = document.getElementById('payRemaining');
+        if (state.autoRemaining) {
+          const dep = state.payDeposit || 0;
+          const sec = state.paySecond || 0;
+          const rem = Math.max(0, totals.closingPrice - dep - sec);
+          state.payRemaining = rem;
+          remInput.value = formatMoney(rem, true);
+          remInput.readOnly = true;
+        } else {
+          remInput.readOnly = false;
+          remInput.value = formatMoney(state.payRemaining, true);
+        }
+
+        const displayList = document.getElementById('promoDisplayList');
+        displayList.innerHTML = '';
+        state.promos.filter((p) => p.showOnPrint).forEach((p) => {
+          const row = document.createElement('div');
+          row.className = 'promo-line';
+
+          const amt = calcPromoAmount(p, totals.listPrice);
+          let labelText = p.name || '';
+          if (p.type === 'percent' && p.value) {
+            labelText = `${labelText} (${p.value}%) :`;
+          } else if (p.type === 'fixed' && amt > 0) {
+            labelText = `${labelText} :`;
+          }
+
+          const leftSpan = document.createElement('span');
+          leftSpan.textContent = labelText;
+
+          const rightSpan = document.createElement('span');
+          rightSpan.className = 'promo-line-amt';
+          rightSpan.textContent = p.type === 'gift' ? '' : (amt > 0 ? formatMoney(amt) : '');
+
+          row.appendChild(leftSpan);
+          row.appendChild(rightSpan);
+          displayList.appendChild(row);
+        });
+
+        document.getElementById('quoteDatePrint').textContent = formatDateVN(state.quoteDate);
+      }
+
+      function renderPromoConfigPanel() {
+        const container = document.getElementById('promoConfigList');
+        container.innerHTML = '';
+        const listPrice = state.listPrice || 0;
+
+        state.promos.forEach((p, idx) => {
+          const isExcluded = p.excludeDiscount || p.type === 'gift';
+          const card = document.createElement('div');
+          card.className = 'promo-config-item' + (isExcluded ? ' excluded' : '');
+          const amt = calcPromoAmount(p, listPrice);
+
+          const badgeText = p.type === 'gift'
+            ? 'Quà tặng'
+            : (p.excludeDiscount ? 'Không trừ (0 đ)' : 'Trừ ' + formatMoney(amt) + ' đ');
+
+          card.innerHTML = `
+            <div class="promo-top-row">
+              <span class="promo-idx-tag">#${idx + 1}</span>
+              <input type="text" class="promo-name-input" data-idx="${idx}" data-field="name" value="${escapeAttr(p.name)}" placeholder="Tên hạng mục ưu đãi..." />
+              <button type="button" class="btn btn-danger-ghost btn-sm" data-remove="${idx}" title="Xóa dòng">✕</button>
+            </div>
+            <div class="promo-mid-row">
+              <select class="promo-type-select" data-idx="${idx}" data-field="type">
+                <option value="percent" ${p.type === 'percent' ? 'selected' : ''}>% Giá xe</option>
+                <option value="fixed" ${p.type === 'fixed' ? 'selected' : ''}>Tiền mặt</option>
+                <option value="gift" ${p.type === 'gift' ? 'selected' : ''}>Quà tặng</option>
+              </select>
+              ${p.type === 'gift'
+                ? `<div class="promo-gift-note">Chỉ hiển thị tên quà tặng</div>`
+                : `<input type="text" class="promo-val-input tabular" data-idx="${idx}" data-field="value" value="${p.type === 'percent' ? (p.value ?? '') : formatMoney(p.value, true)}" placeholder="${p.type === 'percent' ? 'Nhập % (VD: 9)' : 'Nhập số tiền'}" />`
+              }
+            </div>
+            <div class="promo-bottom-row">
+              <label class="check-label">
+                <input type="checkbox" data-idx="${idx}" data-field="excludeDiscount" ${p.excludeDiscount ? 'checked' : ''} ${p.type === 'gift' ? 'disabled' : ''} />
+                <span>Không trừ vào giá</span>
+              </label>
+              <span class="promo-impact-badge tabular ${isExcluded ? 'inactive' : 'active'}">${badgeText}</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      function updatePaymentMethodUI() {
+        const isInstallment = state.paymentMethod !== 'cash';
+        document.getElementById('payBoxInstallment').textContent = isInstallment ? '☒' : '☐';
+        document.getElementById('payBoxCash').textContent = isInstallment ? '☐' : '☒';
+        document.querySelector('[data-pay="installment"]').setAttribute('aria-checked', String(isInstallment));
+        document.querySelector('[data-pay="cash"]').setAttribute('aria-checked', String(!isInstallment));
+      }
+
+      function populateFormFromState() {
+        document.getElementById('recordStatusSelect').value = state.status || 'dealing';
+        document.getElementById('tvbhName').value = state.tvbhName || '';
+        document.getElementById('customerName').value = state.customerName || '';
+        document.getElementById('quoteDate').value = state.quoteDate || '';
+        document.getElementById('customerAddress').value = state.customerAddress || '';
+        document.getElementById('carModel').value = state.carModel || '';
+        document.getElementById('representative').value = state.representative || '';
+        document.getElementById('carColor').value = state.carColor || '';
+        document.getElementById('customerDob').value = state.customerDob || '';
+        document.getElementById('deliveryTime').value = state.deliveryTime || '';
+        document.getElementById('customerContact').value = state.customerContact || '';
+        document.getElementById('deliveryLocation').value = state.deliveryLocation || '';
+        document.getElementById('customerIdNumber').value = state.customerIdNumber || '';
+        document.getElementById('idIssueDate').value = state.idIssueDate || '';
+        document.getElementById('idIssuePlace').value = state.idIssuePlace || '';
+
+        updatePaymentMethodUI();
+
+        document.querySelectorAll('.cost-input').forEach((inp) => {
+          const key = inp.dataset.cost;
+          inp.value = formatMoney(state.costs[key], true);
+        });
+
+        document.getElementById('listPrice').value = formatMoney(state.listPrice, true);
+        document.getElementById('payDeposit').value = formatMoney(state.payDeposit, true);
+        document.getElementById('paySecond').value = formatMoney(state.paySecond, true);
+        document.getElementById('payRemaining').value = formatMoney(state.payRemaining, true);
+        document.getElementById('chkAutoRemaining').checked = !!state.autoRemaining;
+
+        const c1 = state.commissions[0] || { name: '', amount: null, cccd: '', phone: '' };
+        const c2 = state.commissions[1] || { name: '', amount: null, cccd: '', phone: '' };
+        document.getElementById('commName1').value = c1.name || '';
+        document.getElementById('commAmt1').value = formatMoney(c1.amount, true);
+        document.getElementById('commCccd1').value = c1.cccd || '';
+        document.getElementById('commPhone1').value = c1.phone || '';
+        document.getElementById('commName2').value = c2.name || '';
+        document.getElementById('commAmt2').value = formatMoney(c2.amount, true);
+        document.getElementById('commCccd2').value = c2.cccd || '';
+        document.getElementById('commPhone2').value = c2.phone || '';
+
+        document.getElementById('bonusPriceDiff').value = formatMoney(state.bonusPriceDiff, true);
+        document.getElementById('bonusHot').value = formatMoney(state.bonusHot, true);
+        document.getElementById('bonusProductivity').value = formatMoney(state.bonusProductivity, true);
+
+        renderPromoConfigPanel();
+        renderCalculationsAndPromos();
+        requestAnimationFrame(autoResizeAllTextareas);
+      }
+
+      /* ======================== AUTOSAVE & RECORDS ======================== */
+      function scheduleAutosave() {
+        const pill = document.getElementById('autosavePill');
+        const text = document.getElementById('autosaveText');
+        pill.classList.add('saving');
+        text.textContent = 'Đang lưu...';
+        clearTimeout(autosaveTimer);
+        autosaveTimer = setTimeout(() => {
+          try {
+            localStorage.setItem(STORAGE_AUTOSAVE, JSON.stringify(state));
+            pill.classList.remove('saving');
+            text.textContent = `Tự lưu ${new Date().toTimeString().slice(0, 8)}`;
+          } catch {
+            pill.classList.remove('saving');
+            text.textContent = 'Lỗi lưu bộ nhớ';
+          }
+        }, 350);
+      }
+
+      function getSavedRecords() {
+        try {
+          const raw = localStorage.getItem(STORAGE_RECORDS);
+          const arr = raw ? JSON.parse(raw) : [];
+          return Array.isArray(arr) ? arr : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function setSavedRecords(records) {
+        localStorage.setItem(STORAGE_RECORDS, JSON.stringify(records));
+        document.getElementById('savedCountBadge').textContent = records.length;
+      }
+
+      function saveCurrentProgress(asNew = false) {
+        const records = getSavedRecords();
+        const totals = computeTotals();
+        const targetId = (!asNew && state.recordId) ? state.recordId : uid();
+        state.recordId = targetId;
+
+        const entry = {
+          id: targetId,
+          updatedAt: new Date().toISOString(),
+          summary: {
+            customerName: state.customerName || '(Chưa nhập tên KH)',
+            carModel: state.carModel || 'Chưa chọn xe',
+            tvbhName: state.tvbhName || '',
+            quoteDate: state.quoteDate || '',
+            closingPrice: totals.closingPrice,
+            status: state.status || 'dealing'
+          },
+          data: JSON.parse(JSON.stringify(state))
+        };
+
+        const idx = records.findIndex((r) => r.id === targetId);
+        if (idx >= 0) {
+          records[idx] = entry;
+          showToast(`Đã cập nhật tiến trình: ${entry.summary.customerName}`);
+        } else {
+          records.unshift(entry);
+          showToast(`Đã lưu tiến trình mới: ${entry.summary.customerName}`);
+        }
+
+        setSavedRecords(records);
+        localStorage.setItem(STORAGE_AUTOSAVE, JSON.stringify(state));
+        renderRecordsDrawer();
+      }
+
+      function renderRecordsDrawer() {
+        const listEl = document.getElementById('recordsList');
+        const query = (document.getElementById('recordSearch').value || '').trim().toLowerCase();
+        const records = getSavedRecords();
+
+        const filtered = records.filter((rec) => {
+          if (activeFilter !== 'all' && rec.summary.status !== activeFilter) return false;
+          if (!query) return true;
+          const hay = [
+            rec.summary.customerName,
+            rec.summary.carModel,
+            rec.summary.tvbhName,
+            rec.data?.customerContact,
+            rec.data?.customerIdNumber
+          ].join(' ').toLowerCase();
+          return hay.includes(query);
+        });
+
+        document.getElementById('drawerSubtitle').textContent = `${records.length} hồ sơ đang lưu trên trình duyệt`;
+
+        if (filtered.length === 0) {
+          listEl.innerHTML = `<div class="empty-state">Chưa có tiến trình nào phù hợp.<br/>Bấm <strong>Lưu tiến trình</strong> để lưu phiếu hiện tại.</div>`;
+          return;
+        }
+
+        listEl.innerHTML = '';
+        filtered.forEach((rec) => {
+          const st = STATUS_META[rec.summary.status] || STATUS_META.draft;
+          const isCurrent = state.recordId === rec.id;
+          const updatedDate = new Date(rec.updatedAt);
+          const timeLabel = Number.isNaN(updatedDate.getTime())
+            ? ''
+            : updatedDate.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+          const card = document.createElement('div');
+          card.className = 'record-card' + (isCurrent ? ' active-record' : '');
+          card.innerHTML = `
+            <div class="record-top">
+              <div class="record-name">${escapeAttr(rec.summary.customerName)}</div>
+              <span class="status-chip ${st.cls}">${st.label}</span>
+            </div>
+            <div class="record-meta">
+              <span><strong>${escapeAttr(rec.summary.carModel)}</strong></span>
+              <span class="tabular">Đóng deal: <strong>${formatMoney(rec.summary.closingPrice)}</strong></span>
+            </div>
+            <div class="record-meta" style="font-size: 11px; color: var(--ink-muted);">
+              <span>TVBH: ${escapeAttr(rec.summary.tvbhName || '—')}</span>
+              <span>•</span>
+              <span>Cập nhật: ${timeLabel}</span>
+            </div>
+            <div class="record-actions">
+              <button type="button" class="btn btn-sm btn-primary" data-load-id="${rec.id}">Mở phiếu</button>
+              <button type="button" class="btn btn-sm" data-dup-id="${rec.id}">Nhân bản</button>
+              <button type="button" class="btn btn-sm btn-danger-ghost" data-del-id="${rec.id}">Xóa</button>
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+      }
+
+      function openDrawer() {
+        renderRecordsDrawer();
+        document.getElementById('drawerBackdrop').classList.add('open');
+        document.getElementById('progressDrawer').classList.add('open');
+      }
+
+      function closeDrawer() {
+        document.getElementById('drawerBackdrop').classList.remove('open');
+        document.getElementById('progressDrawer').classList.remove('open');
+      }
+
+      function downloadJson(payload, filename) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function slugify(str) {
+        return String(str || 'worksheet')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .toLowerCase() || 'worksheet';
+      }
+
+      function bindEvents() {
+        const textBindings = [
+          ['tvbhName', 'tvbhName'],
+          ['customerName', 'customerName'],
+          ['quoteDate', 'quoteDate'],
+          ['customerAddress', 'customerAddress'],
+          ['carModel', 'carModel'],
+          ['representative', 'representative'],
+          ['carColor', 'carColor'],
+          ['customerDob', 'customerDob'],
+          ['deliveryTime', 'deliveryTime'],
+          ['customerContact', 'customerContact'],
+          ['deliveryLocation', 'deliveryLocation'],
+          ['customerIdNumber', 'customerIdNumber'],
+          ['idIssueDate', 'idIssueDate'],
+          ['idIssuePlace', 'idIssuePlace']
+        ];
+
+        textBindings.forEach(([elId, key]) => {
+          const el = document.getElementById(elId);
+          el.addEventListener('input', () => {
+            state[key] = el.value;
+            if (el.tagName === 'TEXTAREA') autoResizeTextarea(el);
+            renderCalculationsAndPromos();
+            scheduleAutosave();
+          });
+        });
+
+        document.getElementById('recordStatusSelect').addEventListener('change', (e) => {
+          state.status = e.target.value;
+          scheduleAutosave();
+        });
+
+        document.querySelectorAll('.pay-choice').forEach((el) => {
+          const activate = () => {
+            state.paymentMethod = el.dataset.pay;
+            updatePaymentMethodUI();
+            scheduleAutosave();
+          };
+          el.addEventListener('click', activate);
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              activate();
+            }
+          });
+        });
+
+        function bindMoneyInput(el, onUpdate) {
+          el.addEventListener('input', () => {
+            onUpdate(parseMoney(el.value));
+            renderCalculationsAndPromos();
+            scheduleAutosave();
+          });
+          el.addEventListener('blur', () => {
+            el.value = formatMoney(parseMoney(el.value), true);
+          });
+        }
+
+        document.querySelectorAll('.cost-input').forEach((inp) => {
+          bindMoneyInput(inp, (val) => { state.costs[inp.dataset.cost] = val || 0; });
+        });
+
+        bindMoneyInput(document.getElementById('listPrice'), (val) => {
+          state.listPrice = val || 0;
+          renderPromoConfigPanel();
+        });
+
+        bindMoneyInput(document.getElementById('payDeposit'), (val) => { state.payDeposit = val; });
+        bindMoneyInput(document.getElementById('paySecond'), (val) => { state.paySecond = val; });
+        bindMoneyInput(document.getElementById('payRemaining'), (val) => {
+          if (!state.autoRemaining) state.payRemaining = val;
+        });
+
+        const bindComm = (idx, suffix) => {
+          const nameEl = document.getElementById('commName' + suffix);
+          nameEl.addEventListener('input', (e) => {
+            state.commissions[idx].name = e.target.value;
+            autoResizeTextarea(nameEl);
+            scheduleAutosave();
+          });
+          bindMoneyInput(document.getElementById('commAmt' + suffix), (val) => {
+            state.commissions[idx].amount = val;
+          });
+          document.getElementById('commCccd' + suffix).addEventListener('input', (e) => {
+            state.commissions[idx].cccd = e.target.value;
+            scheduleAutosave();
+          });
+          document.getElementById('commPhone' + suffix).addEventListener('input', (e) => {
+            state.commissions[idx].phone = e.target.value;
+            scheduleAutosave();
+          });
+        };
+        bindComm(0, '1');
+        bindComm(1, '2');
+
+        bindMoneyInput(document.getElementById('bonusPriceDiff'), (val) => { state.bonusPriceDiff = val; });
+        bindMoneyInput(document.getElementById('bonusHot'), (val) => { state.bonusHot = val; });
+        bindMoneyInput(document.getElementById('bonusProductivity'), (val) => { state.bonusProductivity = val; });
+
+        document.getElementById('chkAutoRemaining').addEventListener('change', (e) => {
+          state.autoRemaining = e.target.checked;
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        const promoPanel = document.getElementById('promoConfigList');
+        promoPanel.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.dataset.idx, 10);
+          const field = e.target.dataset.field;
+          if (Number.isNaN(idx) || !field || !state.promos[idx]) return;
+
+          if (field === 'name') {
+            state.promos[idx].name = e.target.value;
+          } else if (field === 'value') {
+            if (state.promos[idx].type === 'percent') {
+              state.promos[idx].value = parseFloat(e.target.value.replace(',', '.')) || 0;
+            } else {
+              state.promos[idx].value = parseMoney(e.target.value) || 0;
+            }
+            const card = e.target.closest('.promo-config-item');
+            const badge = card?.querySelector('.promo-impact-badge');
+            if (badge) {
+              const amt = calcPromoAmount(state.promos[idx], state.listPrice);
+              badge.textContent = state.promos[idx].excludeDiscount
+                ? 'Không trừ (0 đ)'
+                : 'Trừ ' + formatMoney(amt) + ' đ';
+            }
+          }
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        promoPanel.addEventListener('change', (e) => {
+          const idx = parseInt(e.target.dataset.idx, 10);
+          const field = e.target.dataset.field;
+          if (Number.isNaN(idx) || !field || !state.promos[idx]) return;
+
+          if (field === 'type') {
+            state.promos[idx].type = e.target.value;
+            if (e.target.value === 'gift') {
+              state.promos[idx].value = 0;
+              state.promos[idx].excludeDiscount = true;
+            }
+            renderPromoConfigPanel();
+          } else if (field === 'excludeDiscount') {
+            state.promos[idx].excludeDiscount = e.target.checked;
+            renderPromoConfigPanel();
+          }
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        promoPanel.addEventListener('focusout', (e) => {
+          if (e.target.dataset.field === 'value') {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            if (!Number.isNaN(idx) && state.promos[idx] && state.promos[idx].type === 'fixed') {
+              e.target.value = formatMoney(state.promos[idx].value, true);
+            }
+          }
+        });
+
+        promoPanel.addEventListener('click', (e) => {
+          const removeBtn = e.target.closest('[data-remove]');
+          if (removeBtn) {
+            const idx = parseInt(removeBtn.dataset.remove, 10);
+            state.promos.splice(idx, 1);
+            renderPromoConfigPanel();
+            renderCalculationsAndPromos();
+            scheduleAutosave();
+          }
+        });
+
+        document.getElementById('btnAddPromo').addEventListener('click', () => {
+          state.promos.push({
+            id: uid(),
+            name: 'Hạng mục hỗ trợ thêm',
+            type: 'fixed',
+            value: 0,
+            excludeDiscount: false,
+            showOnPrint: true
+          });
+          renderPromoConfigPanel();
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        document.getElementById('btnNewForm').addEventListener('click', () => {
+          if (!confirm('Tạo phiếu trắng mới? (Dữ liệu chưa lưu vào danh sách sẽ bị thay thế)')) return;
+          state = createBlankState();
+          populateFormFromState();
+          scheduleAutosave();
+          showToast('Đã tạo phiếu Worksheet trắng mới');
+        });
+
+        document.getElementById('btnLoadSample').addEventListener('click', () => {
+          state = createSampleState();
+          populateFormFromState();
+          scheduleAutosave();
+          showToast('Đã nạp dữ liệu mẫu (PHẠM THỊ NGỌC NHUNG - MPV7)');
+        });
+
+        document.getElementById('btnSaveProgress').addEventListener('click', () => saveCurrentProgress(false));
+        document.getElementById('btnSaveAsNew').addEventListener('click', () => saveCurrentProgress(true));
+        document.getElementById('btnOpenDrawer').addEventListener('click', openDrawer);
+        document.getElementById('btnCloseDrawer').addEventListener('click', closeDrawer);
+        document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+        document.getElementById('btnPrint').addEventListener('click', () => {
+          autoResizeAllTextareas();
+          window.print();
+        });
+
+        document.getElementById('recordSearch').addEventListener('input', renderRecordsDrawer);
+        document.getElementById('statusFilterPills').addEventListener('click', (e) => {
+          const pill = e.target.closest('[data-filter]');
+          if (!pill) return;
+          activeFilter = pill.dataset.filter;
+          document.querySelectorAll('.filter-pill').forEach((p) => p.classList.toggle('active', p === pill));
+          renderRecordsDrawer();
+        });
+
+        document.getElementById('recordsList').addEventListener('click', (e) => {
+          const loadBtn = e.target.closest('[data-load-id]');
+          const dupBtn = e.target.closest('[data-dup-id]');
+          const delBtn = e.target.closest('[data-del-id]');
+          const records = getSavedRecords();
+
+          if (loadBtn) {
+            const rec = records.find((r) => r.id === loadBtn.dataset.loadId);
+            if (rec) {
+              state = JSON.parse(JSON.stringify(rec.data));
+              state.recordId = rec.id;
+              populateFormFromState();
+              scheduleAutosave();
+              closeDrawer();
+              showToast(`Đã mở tiến trình: ${rec.summary.customerName}`);
+            }
+          } else if (dupBtn) {
+            const rec = records.find((r) => r.id === dupBtn.dataset.dupId);
+            if (rec) {
+              const copy = JSON.parse(JSON.stringify(rec));
+              copy.id = uid();
+              copy.updatedAt = new Date().toISOString();
+              copy.summary.customerName = copy.summary.customerName + ' (Bản sao)';
+              copy.data.recordId = copy.id;
+              copy.data.customerName = copy.summary.customerName;
+              records.unshift(copy);
+              setSavedRecords(records);
+              renderRecordsDrawer();
+              showToast('Đã nhân bản tiến trình');
+            }
+          } else if (delBtn) {
+            const id = delBtn.dataset.delId;
+            if (!confirm('Xóa tiến trình này khỏi danh sách đã lưu?')) return;
+            const next = records.filter((r) => r.id !== id);
+            if (state.recordId === id) state.recordId = null;
+            setSavedRecords(next);
+            renderRecordsDrawer();
+            showToast('Đã xóa tiến trình');
+          }
+        });
+
+        document.getElementById('btnExportCurrentJson').addEventListener('click', () => {
+          const name = `worksheet-${slugify(state.customerName)}-${state.quoteDate || 'draft'}.json`;
+          downloadJson({ type: 'vinfast-worksheet-single', version: 1, data: state }, name);
+          showToast('Đã xuất file JSON phiếu hiện tại');
+        });
+
+        document.getElementById('btnExportAllJson').addEventListener('click', () => {
+          const records = getSavedRecords();
+          const today = new Date().toISOString().slice(0, 10);
+          downloadJson({ type: 'vinfast-worksheet-backup', version: 1, records }, `vinfast-worksheets-backup-${today}.json`);
+          showToast(`Đã sao lưu ${records.length} tiến trình ra file JSON`);
+        });
+
+        document.getElementById('btnImportJson').addEventListener('click', () => {
+          document.getElementById('jsonFileInput').click();
+        });
+
+        document.getElementById('jsonFileInput').addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const parsed = JSON.parse(String(reader.result));
+              if (parsed.type === 'vinfast-worksheet-single' && parsed.data) {
+                state = Object.assign(createBlankState(), parsed.data);
+                populateFormFromState();
+                scheduleAutosave();
+                showToast('Đã nạp phiếu từ file JSON');
+              } else if (parsed.type === 'vinfast-worksheet-backup' && Array.isArray(parsed.records)) {
+                const existing = getSavedRecords();
+                const map = new Map(existing.map((r) => [r.id, r]));
+                parsed.records.forEach((r) => {
+                  if (r && r.id && r.data) map.set(r.id, r);
+                });
+                const merged = Array.from(map.values()).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+                setSavedRecords(merged);
+                renderRecordsDrawer();
+                showToast(`Đã nhập ${parsed.records.length} tiến trình từ file sao lưu`);
+              } else {
+                showToast('File JSON không đúng định dạng Worksheet');
+              }
+            } catch {
+              showToast('Không thể đọc file JSON');
+            }
+            e.target.value = '';
+          };
+          reader.readAsText(file);
+        });
+
+        window.addEventListener('beforeprint', autoResizeAllTextareas);
+
+        document.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            saveCurrentProgress(false);
+          } else if (e.key === 'Escape') {
+            closeDrawer();
+          }
+        });
+      }
+
+      function init() {
+        try {
+          const saved = localStorage.getItem(STORAGE_AUTOSAVE);
+          if (saved) {
+            state = Object.assign(createSampleState(), JSON.parse(saved));
+          }
+        } catch {
+          state = createSampleState();
+        }
+        bindEvents();
+        populateFormFromState();
+        document.getElementById('savedCountBadge').textContent = getSavedRecords().length;
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
