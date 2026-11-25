@@ -218,6 +218,71 @@
       border-radius: 6px;
     }
 
+    .toolbar-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px;
+      border-radius: 9px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .toolbar-group-excel {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 4px;
+      border-radius: 9px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .toolbar-group-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #166534;
+      padding: 0 5px 0 6px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    .btn-excel-import {
+      background: #ffffff;
+      border-color: #86efac;
+      color: #166534;
+      padding: 6px 10px;
+      font-size: 12.5px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-excel-import:hover {
+        background: #dcfce7;
+        border-color: #4ade80;
+      }
+    }
+
+    .btn-excel-export {
+      background: #15803d;
+      border-color: #15803d;
+      color: #ffffff;
+      padding: 6px 10px;
+      font-size: 12.5px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-excel-export:hover {
+        background: #166534;
+        border-color: #166534;
+      }
+    }
+
+    .toolbar-group .btn {
+      padding: 6px 10px;
+      font-size: 12.5px;
+    }
+
     .count-badge {
       background: var(--accent-soft);
       color: var(--accent);
@@ -1885,12 +1950,12 @@
     <div class="toolbar-left">
       <div class="brand-mark">
         <span class="brand-badge">VF</span>
-        <span>WORKSHEET — VINFAST NGỌC TƯỜNG</span>
+        <span>Worksheet</span>
       </div>
       <div class="tab-switcher" role="tablist" aria-label="Chuyển đổi chế độ làm việc">
         <button type="button" class="tab-btn active" id="tabBtnWorksheet" role="tab" aria-selected="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span>Phiếu Worksheet A4</span>
+          <span>Phiếu A4</span>
         </button>
         <button type="button" class="tab-btn" id="tabBtnCccd" role="tab" aria-selected="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
@@ -1904,30 +1969,44 @@
     </div>
 
     <div class="toolbar-actions">
-      <button type="button" class="btn" id="btnExportExcelTop" title="Xuất danh sách các Worksheet đã lưu ra file Excel (.xlsx)" style="background: #15803d; border-color: #15803d; color: #ffffff;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
-        <span>Xuất Excel (.xlsx)</span>
-      </button>
-      <button type="button" class="btn" id="btnNewForm">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Tạo mới</span>
-      </button>
-      <button type="button" class="btn" id="btnLoadSample">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-        <span>Dữ liệu mẫu</span>
-      </button>
-      <button type="button" class="btn btn-primary" id="btnSaveProgress" title="Lưu tiến trình (Ctrl+S)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        <span>Lưu tiến trình</span>
-      </button>
-      <button type="button" class="btn" id="btnOpenDrawer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        <span>Lấy tiến trình</span>
-        <span id="savedCountBadge" class="count-badge">0</span>
-      </button>
-      <button type="button" class="btn btn-dark" id="btnPrint" title="In đúng form chuẩn A4 (Ctrl+P)">
+      <!-- Vùng riêng: Sao lưu & Khôi phục Excel -->
+      <div class="toolbar-group-excel" aria-label="Sao lưu và khôi phục Excel">
+        <span class="toolbar-group-label">Excel</span>
+        <button type="button" class="btn btn-excel-import" id="btnImportExcelTop" title="Tải file Excel (.xlsx / .csv) để khôi phục dữ liệu đã lưu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Nhập</span>
+        </button>
+        <button type="button" class="btn btn-excel-export" id="btnExportExcelTop" title="Xuất toàn bộ danh sách Worksheet đã lưu ra file Excel (.xlsx)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Xuất</span>
+        </button>
+      </div>
+
+      <!-- Vùng riêng: Quản lý phiếu & Tiến trình -->
+      <div class="toolbar-group" aria-label="Quản lý phiếu và tiến trình">
+        <button type="button" class="btn" id="btnNewForm" title="Tạo phiếu trắng mới">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Mới</span>
+        </button>
+        <button type="button" class="btn" id="btnLoadSample" title="Nạp dữ liệu mẫu chuẩn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Mẫu</span>
+        </button>
+        <button type="button" class="btn btn-primary" id="btnSaveProgress" title="Lưu tiến trình (Ctrl+S)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Lưu WS</span>
+        </button>
+        <button type="button" class="btn" id="btnOpenDrawer" title="Mở danh sách tiến trình đã lưu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span>Tiến trình</span>
+          <span id="savedCountBadge" class="count-badge">0</span>
+        </button>
+      </div>
+
+      <!-- Nút chính: In A4 -->
+      <button type="button" class="btn btn-dark" id="btnPrint" title="Kiểm tra & In đúng form chuẩn A4 2 mặt (Ctrl+P)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        <span>In / Xuất PDF A4</span>
+        <span>In A4</span>
       </button>
     </div>
   </header>
@@ -2400,9 +2479,11 @@
               <span>Tự tính mục <strong>Còn lại</strong> (Giá đóng deal − Đặt cọc − Lần 2)</span>
             </label>
             <div class="tool-btn-grid">
-              <button type="button" class="btn btn-sm" id="btnExportCurrentJson">Xuất JSON phiếu</button>
-              <button type="button" class="btn btn-sm" id="btnImportJson">Nhập file JSON</button>
+              <button type="button" class="btn btn-sm" id="btnImportExcelSide" style="background: #f0fdf4; border-color: #86efac; color: #166534;">Nhập Excel (.xlsx)</button>
+              <button type="button" class="btn btn-sm" id="btnImportJson">Nhập JSON</button>
+              <button type="button" class="btn btn-sm" id="btnExportCurrentJson" style="grid-column: 1 / -1;">Xuất JSON phiếu hiện tại</button>
               <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" />
+              <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" style="display: none;" />
             </div>
           </div>
         </div>
@@ -2612,8 +2693,9 @@
 
     <div class="drawer-footer" style="flex-wrap: wrap;">
       <button type="button" class="btn btn-sm" id="btnSaveAsNew">Lưu bản mới</button>
-      <button type="button" class="btn btn-sm" id="btnExportAllExcel" style="background: #15803d; border-color: #15803d; color: #ffffff;">Xuất Excel (.xlsx)</button>
-      <button type="button" class="btn btn-sm" id="btnExportAllJson">Sao lưu JSON</button>
+      <button type="button" class="btn btn-sm" id="btnExportAllExcel" style="background: #15803d; border-color: #15803d; color: #ffffff;">Xuất Excel</button>
+      <button type="button" class="btn btn-sm" id="btnImportAllExcel" style="background: #f0fdf4; border-color: #86efac; color: #166534;">Nhập Excel</button>
+      <button type="button" class="btn btn-sm" id="btnExportAllJson">JSON</button>
     </div>
   </aside>
 
@@ -4327,10 +4409,20 @@
             }
             const wb = window.XLSX.utils.book_new();
             window.XLSX.utils.book_append_sheet(wb, ws, 'Danh sach WS');
+
+            // Sheet 2: Lossless backup snapshot so uploading this .xlsx back restores 100% of every field
+            const backupRows = records.map((rec) => ({
+              id: rec.id,
+              updatedAt: rec.updatedAt || new Date().toISOString(),
+              json: JSON.stringify(rec.data)
+            }));
+            const wsBackup = window.XLSX.utils.json_to_sheet(backupRows);
+            window.XLSX.utils.book_append_sheet(wb, wsBackup, '_WS_BACKUP_DATA');
+
             window.XLSX.writeFile(wb, filename);
             showToast(usedCurrentOnly
               ? 'Chưa có WS đã lưu — đã xuất phiếu hiện tại ra file Excel (.xlsx)'
-              : `Đã xuất ${records.length} Worksheet ra file Excel (.xlsx)`
+              : `Đã xuất ${records.length} Worksheet ra file Excel (.xlsx) kèm dữ liệu khôi phục`
             );
           } catch {
             exportRowsAsCsvFallback(rows, filename);
@@ -4338,8 +4430,155 @@
           }
         }
 
+        /* ======================== RESTORE / IMPORT WORKSHEETS FROM EXCEL (.XLSX / .CSV) ======================== */
+        function parseDateVNToIso(str) {
+          const m = String(str || '').trim().match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+          if (!m) return String(str || '').trim();
+          return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+        }
+
+        function mapStatusLabelToKey(label) {
+          const s = stripDiacritics(label).toLowerCase();
+          if (s.includes('duyet')) return 'approved';
+          if (s.includes('coc')) return 'deposited';
+          if (s.includes('gut')) return 'dealing';
+          return 'draft';
+        }
+
+        async function importWorksheetsFromExcelFile(file) {
+          if (!file) return;
+          try {
+            showToast('Đang đọc file Excel để khôi phục dữ liệu...');
+            await loadExternalScript(
+              'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js',
+              () => typeof window.XLSX !== 'undefined'
+            );
+            const buf = await file.arrayBuffer();
+            const wb = window.XLSX.read(buf, { type: 'array' });
+
+            const importedRecords = [];
+
+            // Strategy 1: Lossless restore from _WS_BACKUP_DATA sheet (100% exact fields, promos, custom costs)
+            if (wb.SheetNames.includes('_WS_BACKUP_DATA')) {
+              const bRows = window.XLSX.utils.sheet_to_json(wb.Sheets['_WS_BACKUP_DATA']);
+              bRows.forEach((row) => {
+                if (!row || !row.json) return;
+                try {
+                  const data = normalizeState(JSON.parse(String(row.json)));
+                  const { closingPrice } = computeTotalsForData(data);
+                  const id = row.id || data.recordId || uid();
+                  data.recordId = id;
+                  importedRecords.push({
+                    id,
+                    updatedAt: row.updatedAt || new Date().toISOString(),
+                    summary: {
+                      customerName: data.customerName || '(Chưa nhập tên KH)',
+                      carModel: data.carModel || 'Chưa chọn xe',
+                      tvbhName: data.tvbhName || '',
+                      quoteDate: data.quoteDate || '',
+                      closingPrice,
+                      status: data.status || 'dealing'
+                    },
+                    data
+                  });
+                } catch {}
+              });
+            }
+
+            // Strategy 2: Fallback parse directly from visible Sheet 1 ("Danh sach WS") if no backup sheet
+            if (!importedRecords.length && wb.SheetNames.length) {
+              const firstSheet = wb.Sheets[wb.SheetNames[0]];
+              const rows = window.XLSX.utils.sheet_to_json(firstSheet);
+              rows.forEach((r) => {
+                const st = String(r['Trạng thái'] || '').trim();
+                if (st.toUpperCase() === 'TỔNG CỘNG') return;
+                const custName = String(r['Tên khách hàng'] || '').trim();
+                const carModel = String(r['Loại xe'] || '').trim();
+                if (!custName && !carModel) return;
+
+                const data = createBlankState();
+                const id = uid();
+                data.recordId = id;
+                data.status = mapStatusLabelToKey(st);
+                data.quoteDate = parseDateVNToIso(r['Ngày báo giá']) || data.quoteDate;
+                data.tvbhName = String(r['Tên TVBH'] || '').trim();
+                data.customerName = custName;
+                data.customerContact = String(r['Điện thoại / Email'] || '').trim();
+                data.customerIdNumber = String(r['CCCD / MST'] || '').trim();
+                data.customerDob = String(r['Ngày sinh'] || '').trim();
+                data.idIssueDate = String(r['Ngày cấp'] || '').trim();
+                data.idIssuePlace = String(r['Nơi cấp'] || '').trim() || data.idIssuePlace;
+                data.customerAddress = String(r['Địa chỉ'] || '').trim();
+                data.carModel = carModel;
+                data.carColor = String(r['Màu xe'] || '').trim();
+                data.paymentMethod = /tiền mặt|tien mat/i.test(String(r['Phương thức TT'] || '')) ? 'cash' : 'installment';
+                data.deliveryTime = String(r['Dự kiến giao xe'] || '').trim();
+                data.deliveryLocation = String(r['Địa điểm giao xe'] || '').trim();
+                data.listPrice = parseMoney(r['Giá công bố']) || 0;
+                const totalDisc = parseMoney(r['Tổng giảm giá']) || 0;
+                if (totalDisc > 0) {
+                  data.promos = [{
+                    id: uid(),
+                    name: 'Tổng giảm giá (từ Excel)',
+                    type: 'fixed',
+                    value: totalDisc,
+                    excludeDiscount: false,
+                    showOnPrint: true
+                  }];
+                }
+                const totalRel = parseMoney(r['Tổng chi phí liên quan']) || 0;
+                if (totalRel > 0) {
+                  data.costItems = [{ id: uid(), label: 'Tổng chi phí liên quan (từ Excel)', amount: totalRel }];
+                }
+                data.payDeposit = parseMoney(r['Đặt cọc']);
+                data.paySecond = parseMoney(r['Lần 2']);
+                data.payRemaining = parseMoney(r['Còn lại']);
+
+                const { closingPrice } = computeTotalsForData(data);
+                importedRecords.push({
+                  id,
+                  updatedAt: new Date().toISOString(),
+                  summary: {
+                    customerName: data.customerName || '(Chưa nhập tên KH)',
+                    carModel: data.carModel || 'Chưa chọn xe',
+                    tvbhName: data.tvbhName || '',
+                    quoteDate: data.quoteDate || '',
+                    closingPrice,
+                    status: data.status
+                  },
+                  data
+                });
+              });
+            }
+
+            if (!importedRecords.length) {
+              showToast('Không tìm thấy dữ liệu Worksheet hợp lệ trong file Excel.');
+              return;
+            }
+
+            const existing = getSavedRecords();
+            const map = new Map(existing.map((r) => [r.id, r]));
+            importedRecords.forEach((rec) => map.set(rec.id, rec));
+            const merged = Array.from(map.values()).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+            setSavedRecords(merged);
+            renderRecordsDrawer();
+            openDrawer();
+            showToast(`Đã khôi phục & cập nhật ${importedRecords.length} Worksheet từ file Excel!`);
+          } catch (err) {
+            showToast('Không thể đọc file Excel. Vui lòng kiểm tra kết nối mạng hoặc định dạng file.');
+          }
+        }
+
         document.getElementById('btnExportAllExcel').addEventListener('click', exportWorksheetsToExcel);
         document.getElementById('btnExportExcelTop').addEventListener('click', exportWorksheetsToExcel);
+        document.getElementById('btnImportExcelTop').addEventListener('click', () => document.getElementById('excelFileInput').click());
+        document.getElementById('btnImportExcelSide').addEventListener('click', () => document.getElementById('excelFileInput').click());
+        document.getElementById('btnImportAllExcel').addEventListener('click', () => document.getElementById('excelFileInput').click());
+        document.getElementById('excelFileInput').addEventListener('change', async (e) => {
+          const f = e.target.files?.[0];
+          if (f) await importWorksheetsFromExcelFile(f);
+          e.target.value = '';
+        });
 
         document.getElementById('btnImportJson').addEventListener('click', () => {
           document.getElementById('jsonFileInput').click();
