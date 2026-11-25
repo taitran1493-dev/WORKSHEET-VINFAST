@@ -254,19 +254,39 @@
 
     /* ======================== IMPROVED HELPER TOOL PANEL ======================== */
     .helper-panel {
-      width: 375px;
+      width: 385px;
       flex-shrink: 0;
       position: sticky;
       top: 68px;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      max-height: calc(100vh - 86px);
+      max-height: calc(100vh - 84px);
       overflow-y: auto;
-      padding-right: 2px;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      padding: 2px 6px 18px 2px;
+    }
+
+    .helper-panel::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .helper-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .helper-panel::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+
+    .helper-panel::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
 
     .tool-card {
+      flex-shrink: 0;
       background: #ffffff;
       border: 1px solid var(--border-chrome);
       border-radius: 11px;
@@ -382,6 +402,17 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      transition: transform 150ms var(--ease-out), opacity 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .promo-config-item.dragging {
+      opacity: 0.45;
+      border-style: dashed;
+      border-color: var(--accent);
+    }
+
+    .promo-config-item.drag-over {
+      box-shadow: 0 -3px 0 0 var(--accent);
     }
 
     .promo-config-item.excluded {
@@ -391,8 +422,66 @@
 
     .promo-top-row {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       align-items: center;
+    }
+
+    .promo-drag-handle {
+      cursor: grab;
+      color: var(--ink-muted);
+      padding: 2px 3px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+      font-size: 13px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .promo-drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .promo-order-btns {
+      display: inline-flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .btn-icon-xs {
+      appearance: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ink-secondary);
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 0;
+      transition: transform 120ms var(--ease-out), background-color 120ms ease, color 120ms ease;
+    }
+
+    .btn-icon-xs:active:not(:disabled) {
+      transform: scale(0.92);
+    }
+
+    .btn-icon-xs:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-icon-xs:hover:not(:disabled) {
+        background: #eff6ff;
+        border-color: var(--accent);
+        color: var(--accent);
+      }
     }
 
     .promo-idx-tag {
@@ -524,6 +613,46 @@
       gap: 8px;
     }
 
+    /* Cost Items Manager in Right Control Panel */
+    .cost-config-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .cost-config-row {
+      display: grid;
+      grid-template-columns: 24px 1fr 94px auto;
+      gap: 5px;
+      align-items: center;
+      padding: 6px 7px;
+      border: 1px solid #e2e8f0;
+      border-radius: 7px;
+      background: #f8fafc;
+    }
+
+    .cost-config-row input {
+      width: 100%;
+      min-width: 0;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 4px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      background: #ffffff;
+      color: var(--ink-primary);
+      outline: none;
+    }
+
+    .cost-config-row input:focus {
+      border-color: var(--accent);
+    }
+
+    .cost-config-row input.amt {
+      text-align: right;
+      font-weight: 700;
+    }
+
     /* ============================================================================
        OFFICIAL STANDARD PRINT FORM — EXACT MATCH TO UPLOADED PRINTOUT
        Times New Roman | #FCE4D6 Peach Banners | 2px Outer / 1px Inner Borders
@@ -532,10 +661,40 @@
     .sheet-viewport {
       flex: 1;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
       min-width: 0;
       overflow-x: auto;
       padding-bottom: 12px;
+    }
+
+    .sheet-page-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .sheet-page-label {
+      width: 210mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      padding: 0 2px;
+    }
+
+    .sheet-page-label span.tag {
+      background: #ffffff;
+      border: 1px solid var(--border-chrome);
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--ink-muted);
     }
 
     .a4-sheet {
@@ -543,11 +702,11 @@
       min-height: 297mm;
       background: #ffffff;
       color: #000000;
-      padding: 8mm 8mm 8mm 8mm;
+      padding: 12mm 8mm 10mm 8mm;
       box-shadow: var(--shadow-sheet);
       font-family: 'Times New Roman', Times, serif;
       font-size: 10pt;
-      line-height: 1.22;
+      line-height: 1.24;
       position: relative;
       flex-shrink: 0;
     }
@@ -1166,20 +1325,31 @@
       }
 
       .workspace,
-      .sheet-viewport {
+      .sheet-viewport,
+      .sheet-page-wrap {
         display: block !important;
         padding: 0 !important;
         margin: 0 !important;
+        gap: 0 !important;
         max-width: none !important;
         overflow: visible !important;
       }
 
       .a4-sheet {
         width: 210mm !important;
+        height: 297mm !important;
         min-height: 297mm !important;
         margin: 0 !important;
-        padding: 8mm 8mm 8mm 8mm !important;
+        padding: 12mm 8mm 10mm 8mm !important;
         box-shadow: none !important;
+        overflow: hidden !important;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .sheet-page-wrap:last-child .a4-sheet {
+        break-after: auto;
+        page-break-after: auto;
       }
 
       .f-input,
@@ -1245,9 +1415,14 @@
 
   <!-- ======================== WORKSPACE ======================== -->
   <main class="workspace">
-    <!-- EXACT OFFICIAL STANDARD A4 PRINT FORM -->
+    <!-- EXACT OFFICIAL STANDARD A4 PRINT FORM (2-SIDED DUPLEX: PAGE 1 FRONT + PAGE 2 BACK) -->
     <div class="sheet-viewport">
-      <section id="a4Sheet" class="a4-sheet" aria-label="Form chuẩn WORKSHEET VinFast Ngọc Tường">
+      <div class="sheet-page-wrap">
+        <div class="sheet-page-label no-print">
+          <span>Trang 1 — Mặt trước</span>
+          <span class="tag">Khổ A4 dọc (210 × 297 mm)</span>
+        </div>
+        <section id="a4Sheet" class="a4-sheet" aria-label="Trang 1 (Mặt trước) — Form chuẩn WORKSHEET VinFast Ngọc Tường">
 
         <!-- 1. HEADER BANNER -->
         <table class="std-header">
@@ -1389,50 +1564,18 @@
               <col style="width: 39%;" />
               <col style="width: 54%;" />
             </colgroup>
-            <tbody>
+            <thead>
               <tr>
                 <td colspan="3" class="std-peach">CHI PHÍ LIÊN QUAN</td>
               </tr>
-              <tr>
-                <td class="cost-stt">1</td>
-                <td>Thuế trước bạ</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="tax" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">2</td>
-                <td>Phí đăng ký biển số</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="plate" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">3</td>
-                <td>Lệ phí đăng kiểm</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="inspection" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">4</td>
-                <td>Bảo hiểm TNDS</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="civilIns" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">5</td>
-                <td>Bảo hiểm vật chất</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="bodyIns" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">6</td>
-                <td>Phí bảo trì đường bộ (12 tháng)</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="roadFee" type="text" inputmode="numeric" /></td>
-              </tr>
-              <tr>
-                <td class="cost-stt">7</td>
-                <td>Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)</td>
-                <td class="val-c"><input class="f-input b c tabular cost-input" data-cost="serviceFee" type="text" inputmode="numeric" /></td>
-              </tr>
+            </thead>
+            <tbody id="costRowsBody"></tbody>
+            <tfoot>
               <tr>
                 <td colspan="2" class="cost-total-lbl">Tổng chi phí liên quan</td>
                 <td class="val-c tabular" id="totalRelatedCosts">0</td>
               </tr>
-            </tbody>
+            </tfoot>
           </table>
 
           <!-- Right: DEALING / GÚT GIÁ + CLOSING PRICE + PAYMENT TERM -->
@@ -1502,73 +1645,83 @@
         </div>
 
         <!-- 4. SIGNATURES: KHÁCH HÀNG & TƯ VẤN BÁN HÀNG -->
-        <div class="sig-row-top">
-          <div class="sig-cell">KHÁCH HÀNG</div>
-          <div class="sig-cell">TƯ VẤN BÁN HÀNG</div>
-        </div>
-
-        <!-- 5. CHI HOA HỒNG -->
-        <div class="banner-bar">CHI HOA HỒNG</div>
-        <table class="comm-table">
-          <colgroup>
-            <col style="width: 34%;" />
-            <col style="width: 22%;" />
-            <col style="width: 22%;" />
-            <col style="width: 22%;" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Tên người nhận<br />hoa hồng</th>
-              <th>Số tiền</th>
-              <th>CCCD</th>
-              <th>Số điện thoại</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><textarea id="commName1" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
-              <td><input id="commAmt1" class="f-input c tabular" type="text" inputmode="numeric" /></td>
-              <td><input id="commCccd1" class="f-input c tabular" type="text" /></td>
-              <td><input id="commPhone1" class="f-input c tabular" type="text" /></td>
-            </tr>
-            <tr>
-              <td><textarea id="commName2" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
-              <td><input id="commAmt2" class="f-input c tabular" type="text" inputmode="numeric" /></td>
-              <td><input id="commCccd2" class="f-input c tabular" type="text" /></td>
-              <td><input id="commPhone2" class="f-input c tabular" type="text" /></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 6. THƯỞNG TƯ VẤN BÁN HÀNG -->
-        <div class="banner-bar">THƯỞNG TƯ VẤN BÁN HÀNG</div>
-        <table class="bonus-table">
-          <colgroup>
-            <col style="width: 24%;" />
-            <col style="width: 26%;" />
-            <col style="width: 20%;" />
-            <col style="width: 30%;" />
-          </colgroup>
-          <tbody>
-            <tr>
-              <td style="font-weight: 700;">Chênh lệch giá tốt</td>
-              <td><input id="bonusPriceDiff" class="f-input c tabular" type="text" inputmode="numeric" /></td>
-              <td style="font-weight: 700;">Thưởng nóng</td>
-              <td><input id="bonusHot" class="f-input c tabular" type="text" inputmode="numeric" /></td>
-            </tr>
-            <tr>
-              <td style="font-weight: 700;">Lương năng suất</td>
-              <td colspan="3"><input id="bonusProductivity" class="f-input c tabular" type="text" inputmode="numeric" /></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 7. SIGNATURES: TỔNG GIÁM ĐỐC & GIÁM ĐỐC KINH DOANH -->
-        <div class="sig-row-bottom">
-          <div class="sig-cell-bottom">Tổng Giám Đốc</div>
-          <div class="sig-cell-bottom">Giám Đốc Kinh Doanh</div>
+        <div class="sig-row-top" style="margin-top: 18px;">
+          <div class="sig-cell" style="height: 36mm;">KHÁCH HÀNG</div>
+          <div class="sig-cell" style="height: 36mm;">TƯ VẤN BÁN HÀNG</div>
         </div>
       </section>
+      </div>
+
+      <!-- PAGE 2 — MẶT SAU (CHI HOA HỒNG, THƯỞNG TVBH & BAN GIÁM ĐỐC DUYỆT) -->
+      <div class="sheet-page-wrap">
+        <div class="sheet-page-label no-print">
+          <span>Trang 2 — Mặt sau (In 2 mặt)</span>
+          <span class="tag">Chi hoa hồng • Thưởng TVBH • Ban Giám Đốc</span>
+        </div>
+        <section id="a4SheetPage2" class="a4-sheet" aria-label="Trang 2 (Mặt sau) — Chi hoa hồng & Thưởng TVBH">
+          <!-- 5. CHI HOA HỒNG -->
+          <div class="banner-bar">CHI HOA HỒNG</div>
+          <table class="comm-table" style="margin-bottom: 14px;">
+            <colgroup>
+              <col style="width: 34%;" />
+              <col style="width: 22%;" />
+              <col style="width: 22%;" />
+              <col style="width: 22%;" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Tên người nhận<br />hoa hồng</th>
+                <th>Số tiền</th>
+                <th>CCCD</th>
+                <th>Số điện thoại</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="height: 28px;"><textarea id="commName1" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
+                <td><input id="commAmt1" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                <td><input id="commCccd1" class="f-input c tabular" type="text" /></td>
+                <td><input id="commPhone1" class="f-input c tabular" type="text" /></td>
+              </tr>
+              <tr>
+                <td style="height: 28px;"><textarea id="commName2" class="f-textarea auto-grow" rows="1" style="font-weight: 400;"></textarea></td>
+                <td><input id="commAmt2" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                <td><input id="commCccd2" class="f-input c tabular" type="text" /></td>
+                <td><input id="commPhone2" class="f-input c tabular" type="text" /></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 6. THƯỞNG TƯ VẤN BÁN HÀNG -->
+          <div class="banner-bar">THƯỞNG TƯ VẤN BÁN HÀNG</div>
+          <table class="bonus-table" style="margin-bottom: 18px;">
+            <colgroup>
+              <col style="width: 24%;" />
+              <col style="width: 26%;" />
+              <col style="width: 20%;" />
+              <col style="width: 30%;" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td style="font-weight: 700; height: 28px;">Chênh lệch giá tốt</td>
+                <td><input id="bonusPriceDiff" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+                <td style="font-weight: 700;">Thưởng nóng</td>
+                <td><input id="bonusHot" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; height: 28px;">Lương năng suất</td>
+                <td colspan="3"><input id="bonusProductivity" class="f-input c tabular" type="text" inputmode="numeric" /></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 7. SIGNATURES: TỔNG GIÁM ĐỐC & GIÁM ĐỐC KINH DOANH -->
+          <div class="sig-row-bottom" style="margin-top: 16px;">
+            <div class="sig-cell-bottom" style="height: 36mm;">Tổng Giám Đốc</div>
+            <div class="sig-cell-bottom" style="height: 36mm;">Giám Đốc Kinh Doanh</div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <!-- ======================== IMPROVED RIGHT CONTROL PANEL (NEVER PRINTED) ======================== -->
@@ -1622,6 +1775,20 @@
             Tích <strong>Không trừ vào giá</strong> nếu hạng mục chỉ hiển thị trên phiếu mà không cộng vào <em>Giảm giá</em> (như cột <code>x</code> trên Excel).
           </div>
           <div id="promoConfigList" class="promo-config-list"></div>
+        </div>
+      </div>
+
+      <!-- Card 3: Chi phí liên quan (Thêm / Xóa dòng) -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <span>Chi phí liên quan</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary" id="btnAddCost">+ Thêm dòng</button>
+        </div>
+        <div class="tool-card-body">
+          <div id="costConfigList" class="cost-config-list"></div>
         </div>
       </div>
 
@@ -1715,15 +1882,15 @@
           paymentMethod: 'installment',
           idIssueDate: '10/5/2021',
           idIssuePlace: 'Cục Trưởng Cục Cảnh Sát QLHC Về TTXH',
-          costs: {
-            tax: 0,
-            plate: 140000,
-            inspection: 99000,
-            civilIns: 1013400,
-            bodyIns: 7569000,
-            roadFee: 1560000,
-            serviceFee: 4000000
-          },
+          costItems: [
+            { id: 'c1', label: 'Thuế trước bạ', amount: 0 },
+            { id: 'c2', label: 'Phí đăng ký biển số', amount: 140000 },
+            { id: 'c3', label: 'Lệ phí đăng kiểm', amount: 99000 },
+            { id: 'c4', label: 'Bảo hiểm TNDS', amount: 1013400 },
+            { id: 'c5', label: 'Bảo hiểm vật chất', amount: 7569000 },
+            { id: 'c6', label: 'Phí bảo trì đường bộ (12 tháng)', amount: 1560000 },
+            { id: 'c7', label: 'Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)', amount: 4000000 }
+          ],
           listPrice: 750000000,
           promos: [
             {
@@ -1796,15 +1963,15 @@
           paymentMethod: 'installment',
           idIssueDate: '',
           idIssuePlace: 'Cục Trưởng Cục Cảnh Sát QLHC Về TTXH',
-          costs: {
-            tax: 0,
-            plate: 0,
-            inspection: 0,
-            civilIns: 0,
-            bodyIns: 0,
-            roadFee: 0,
-            serviceFee: 0
-          },
+          costItems: [
+            { id: 'c1', label: 'Thuế trước bạ', amount: 0 },
+            { id: 'c2', label: 'Phí đăng ký biển số', amount: 0 },
+            { id: 'c3', label: 'Lệ phí đăng kiểm', amount: 0 },
+            { id: 'c4', label: 'Bảo hiểm TNDS', amount: 0 },
+            { id: 'c5', label: 'Bảo hiểm vật chất', amount: 0 },
+            { id: 'c6', label: 'Phí bảo trì đường bộ (12 tháng)', amount: 0 },
+            { id: 'c7', label: 'Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)', amount: 0 }
+          ],
           listPrice: 0,
           promos: [
             {
@@ -1911,16 +2078,25 @@
         return 0;
       }
 
+      function normalizeState(raw) {
+        const merged = Object.assign(createBlankState(), raw || {});
+        if (!Array.isArray(merged.costItems)) {
+          const old = raw?.costs || {};
+          merged.costItems = [
+            { id: 'c1', label: 'Thuế trước bạ', amount: old.tax || 0 },
+            { id: 'c2', label: 'Phí đăng ký biển số', amount: old.plate || 0 },
+            { id: 'c3', label: 'Lệ phí đăng kiểm', amount: old.inspection || 0 },
+            { id: 'c4', label: 'Bảo hiểm TNDS', amount: old.civilIns || 0 },
+            { id: 'c5', label: 'Bảo hiểm vật chất', amount: old.bodyIns || 0 },
+            { id: 'c6', label: 'Phí bảo trì đường bộ (12 tháng)', amount: old.roadFee || 0 },
+            { id: 'c7', label: raw?.serviceLabel || 'Dịch vụ đăng ký xe (Lấy số ngẫu nhiên)', amount: old.serviceFee || 0 }
+          ];
+        }
+        return merged;
+      }
+
       function computeTotals() {
-        const c = state.costs;
-        const totalRelated =
-          (c.tax || 0) +
-          (c.plate || 0) +
-          (c.inspection || 0) +
-          (c.civilIns || 0) +
-          (c.bodyIns || 0) +
-          (c.roadFee || 0) +
-          (c.serviceFee || 0);
+        const totalRelated = (state.costItems || []).reduce((sum, item) => sum + (item.amount || 0), 0);
 
         const listPrice = state.listPrice || 0;
         let totalDiscount = 0;
@@ -1936,6 +2112,37 @@
         const onRoad = closingPrice + totalRelated;
 
         return { totalRelated, listPrice, totalDiscount, netPrice, closingPrice, onRoad };
+      }
+
+      function renderCostRows() {
+        const tbody = document.getElementById('costRowsBody');
+        tbody.innerHTML = '';
+        (state.costItems || []).forEach((item, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="cost-stt">${idx + 1}</td>
+            <td><textarea class="f-textarea auto-grow cost-sheet-label" data-cost-idx="${idx}" rows="1" style="text-align: left; font-weight: 400;">${escapeAttr(item.label)}</textarea></td>
+            <td class="val-c"><input class="f-input b c tabular cost-sheet-amt" data-cost-idx="${idx}" type="text" inputmode="numeric" value="${formatMoney(item.amount, true)}" /></td>
+          `;
+          tbody.appendChild(tr);
+        });
+        requestAnimationFrame(autoResizeAllTextareas);
+      }
+
+      function renderCostConfigPanel() {
+        const container = document.getElementById('costConfigList');
+        container.innerHTML = '';
+        (state.costItems || []).forEach((item, idx) => {
+          const row = document.createElement('div');
+          row.className = 'cost-config-row';
+          row.innerHTML = `
+            <span class="promo-idx-tag" style="text-align: center;">${idx + 1}</span>
+            <input type="text" data-cost-idx="${idx}" data-cost-field="label" value="${escapeAttr(item.label)}" placeholder="Tên chi phí..." />
+            <input type="text" class="amt tabular" data-cost-idx="${idx}" data-cost-field="amount" inputmode="numeric" value="${formatMoney(item.amount, true)}" placeholder="0" />
+            <button type="button" class="btn btn-danger-ghost btn-sm" data-cost-remove="${idx}" title="Xóa dòng chi phí">✕</button>
+          `;
+          container.appendChild(row);
+        });
       }
 
       function renderCalculationsAndPromos() {
@@ -2003,16 +2210,26 @@
           const isExcluded = p.excludeDiscount || p.type === 'gift';
           const card = document.createElement('div');
           card.className = 'promo-config-item' + (isExcluded ? ' excluded' : '');
+          card.draggable = true;
+          card.dataset.promoIdx = String(idx);
           const amt = calcPromoAmount(p, listPrice);
 
           const badgeText = p.type === 'gift'
             ? 'Quà tặng'
             : (p.excludeDiscount ? 'Không trừ (0 đ)' : 'Trừ ' + formatMoney(amt) + ' đ');
 
+          const isFirst = idx === 0;
+          const isLast = idx === state.promos.length - 1;
+
           card.innerHTML = `
             <div class="promo-top-row">
+              <span class="promo-drag-handle" title="Kéo thả để đổi thứ tự">⋮⋮</span>
               <span class="promo-idx-tag">#${idx + 1}</span>
               <input type="text" class="promo-name-input" data-idx="${idx}" data-field="name" value="${escapeAttr(p.name)}" placeholder="Tên hạng mục ưu đãi..." />
+              <div class="promo-order-btns">
+                <button type="button" class="btn-icon-xs" data-move-up="${idx}" ${isFirst ? 'disabled' : ''} title="Đưa lên trên">↑</button>
+                <button type="button" class="btn-icon-xs" data-move-down="${idx}" ${isLast ? 'disabled' : ''} title="Đưa xuống dưới">↓</button>
+              </div>
               <button type="button" class="btn btn-danger-ghost btn-sm" data-remove="${idx}" title="Xóa dòng">✕</button>
             </div>
             <div class="promo-mid-row">
@@ -2065,10 +2282,8 @@
 
         updatePaymentMethodUI();
 
-        document.querySelectorAll('.cost-input').forEach((inp) => {
-          const key = inp.dataset.cost;
-          inp.value = formatMoney(state.costs[key], true);
-        });
+        renderCostRows();
+        renderCostConfigPanel();
 
         document.getElementById('listPrice').value = formatMoney(state.listPrice, true);
         document.getElementById('payDeposit').value = formatMoney(state.payDeposit, true);
@@ -2315,8 +2530,85 @@
           });
         }
 
-        document.querySelectorAll('.cost-input').forEach((inp) => {
-          bindMoneyInput(inp, (val) => { state.costs[inp.dataset.cost] = val || 0; });
+        // Dynamic Cost Rows (Sheet side)
+        const costRowsBody = document.getElementById('costRowsBody');
+        costRowsBody.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.dataset.costIdx, 10);
+          if (Number.isNaN(idx) || !state.costItems[idx]) return;
+          if (e.target.classList.contains('cost-sheet-label')) {
+            state.costItems[idx].label = e.target.value;
+            autoResizeTextarea(e.target);
+            const panelInput = document.querySelector(`#costConfigList input[data-cost-idx="${idx}"][data-cost-field="label"]`);
+            if (panelInput) panelInput.value = e.target.value;
+          } else if (e.target.classList.contains('cost-sheet-amt')) {
+            const val = parseMoney(e.target.value) || 0;
+            state.costItems[idx].amount = val;
+            const panelInput = document.querySelector(`#costConfigList input[data-cost-idx="${idx}"][data-cost-field="amount"]`);
+            if (panelInput) panelInput.value = formatMoney(val, true);
+          }
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        costRowsBody.addEventListener('focusout', (e) => {
+          if (e.target.classList.contains('cost-sheet-amt')) {
+            const idx = parseInt(e.target.dataset.costIdx, 10);
+            if (!Number.isNaN(idx) && state.costItems[idx]) {
+              e.target.value = formatMoney(state.costItems[idx].amount, true);
+            }
+          }
+        });
+
+        // Dynamic Cost Config Panel (Right side)
+        const costConfigList = document.getElementById('costConfigList');
+        costConfigList.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.dataset.costIdx, 10);
+          const field = e.target.dataset.costField;
+          if (Number.isNaN(idx) || !field || !state.costItems[idx]) return;
+          if (field === 'label') {
+            state.costItems[idx].label = e.target.value;
+            const sheetEl = document.querySelector(`#costRowsBody .cost-sheet-label[data-cost-idx="${idx}"]`);
+            if (sheetEl) {
+              sheetEl.value = e.target.value;
+              autoResizeTextarea(sheetEl);
+            }
+          } else if (field === 'amount') {
+            const val = parseMoney(e.target.value) || 0;
+            state.costItems[idx].amount = val;
+            const sheetEl = document.querySelector(`#costRowsBody .cost-sheet-amt[data-cost-idx="${idx}"]`);
+            if (sheetEl) sheetEl.value = formatMoney(val, true);
+          }
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        });
+
+        costConfigList.addEventListener('focusout', (e) => {
+          if (e.target.dataset.costField === 'amount') {
+            const idx = parseInt(e.target.dataset.costIdx, 10);
+            if (!Number.isNaN(idx) && state.costItems[idx]) {
+              e.target.value = formatMoney(state.costItems[idx].amount, true);
+            }
+          }
+        });
+
+        costConfigList.addEventListener('click', (e) => {
+          const removeBtn = e.target.closest('[data-cost-remove]');
+          if (removeBtn) {
+            const idx = parseInt(removeBtn.dataset.costRemove, 10);
+            state.costItems.splice(idx, 1);
+            renderCostRows();
+            renderCostConfigPanel();
+            renderCalculationsAndPromos();
+            scheduleAutosave();
+          }
+        });
+
+        document.getElementById('btnAddCost').addEventListener('click', () => {
+          state.costItems.push({ id: uid(), label: 'Chi phí khác', amount: 0 });
+          renderCostRows();
+          renderCostConfigPanel();
+          renderCalculationsAndPromos();
+          scheduleAutosave();
         });
 
         bindMoneyInput(document.getElementById('listPrice'), (val) => {
@@ -2418,7 +2710,29 @@
           }
         });
 
+        function movePromo(fromIdx, toIdx) {
+          if (fromIdx === toIdx) return;
+          if (fromIdx < 0 || toIdx < 0 || fromIdx >= state.promos.length || toIdx >= state.promos.length) return;
+          const [moved] = state.promos.splice(fromIdx, 1);
+          state.promos.splice(toIdx, 0, moved);
+          renderPromoConfigPanel();
+          renderCalculationsAndPromos();
+          scheduleAutosave();
+        }
+
         promoPanel.addEventListener('click', (e) => {
+          const upBtn = e.target.closest('[data-move-up]');
+          if (upBtn) {
+            const idx = parseInt(upBtn.dataset.moveUp, 10);
+            movePromo(idx, idx - 1);
+            return;
+          }
+          const downBtn = e.target.closest('[data-move-down]');
+          if (downBtn) {
+            const idx = parseInt(downBtn.dataset.moveDown, 10);
+            movePromo(idx, idx + 1);
+            return;
+          }
           const removeBtn = e.target.closest('[data-remove]');
           if (removeBtn) {
             const idx = parseInt(removeBtn.dataset.remove, 10);
@@ -2427,6 +2741,54 @@
             renderCalculationsAndPromos();
             scheduleAutosave();
           }
+        });
+
+        let draggedPromoIdx = null;
+        promoPanel.addEventListener('dragstart', (e) => {
+          const card = e.target.closest('.promo-config-item');
+          if (!card) return;
+          if (e.target.matches('input, select, button')) {
+            e.preventDefault();
+            return;
+          }
+          draggedPromoIdx = parseInt(card.dataset.promoIdx, 10);
+          card.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', String(draggedPromoIdx));
+        });
+
+        promoPanel.addEventListener('dragover', (e) => {
+          if (draggedPromoIdx === null) return;
+          e.preventDefault();
+          const card = e.target.closest('.promo-config-item');
+          promoPanel.querySelectorAll('.promo-config-item.drag-over').forEach((el) => el.classList.remove('drag-over'));
+          if (card && parseInt(card.dataset.promoIdx, 10) !== draggedPromoIdx) {
+            card.classList.add('drag-over');
+          }
+        });
+
+        promoPanel.addEventListener('dragleave', (e) => {
+          const card = e.target.closest('.promo-config-item');
+          if (card) card.classList.remove('drag-over');
+        });
+
+        promoPanel.addEventListener('drop', (e) => {
+          if (draggedPromoIdx === null) return;
+          e.preventDefault();
+          const card = e.target.closest('.promo-config-item');
+          promoPanel.querySelectorAll('.promo-config-item.drag-over').forEach((el) => el.classList.remove('drag-over'));
+          if (card) {
+            const targetIdx = parseInt(card.dataset.promoIdx, 10);
+            if (!Number.isNaN(targetIdx)) movePromo(draggedPromoIdx, targetIdx);
+          }
+          draggedPromoIdx = null;
+        });
+
+        promoPanel.addEventListener('dragend', () => {
+          draggedPromoIdx = null;
+          promoPanel.querySelectorAll('.promo-config-item').forEach((el) => {
+            el.classList.remove('dragging', 'drag-over');
+          });
         });
 
         document.getElementById('btnAddPromo').addEventListener('click', () => {
@@ -2486,7 +2848,7 @@
           if (loadBtn) {
             const rec = records.find((r) => r.id === loadBtn.dataset.loadId);
             if (rec) {
-              state = JSON.parse(JSON.stringify(rec.data));
+              state = normalizeState(JSON.parse(JSON.stringify(rec.data)));
               state.recordId = rec.id;
               populateFormFromState();
               scheduleAutosave();
@@ -2543,7 +2905,7 @@
             try {
               const parsed = JSON.parse(String(reader.result));
               if (parsed.type === 'vinfast-worksheet-single' && parsed.data) {
-                state = Object.assign(createBlankState(), parsed.data);
+                state = normalizeState(parsed.data);
                 populateFormFromState();
                 scheduleAutosave();
                 showToast('Đã nạp phiếu từ file JSON');
@@ -2584,7 +2946,7 @@
         try {
           const saved = localStorage.getItem(STORAGE_AUTOSAVE);
           if (saved) {
-            state = Object.assign(createSampleState(), JSON.parse(saved));
+            state = normalizeState(JSON.parse(saved));
           }
         } catch {
           state = createSampleState();
