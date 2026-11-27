@@ -2064,7 +2064,7 @@
               </tr>
               <tr>
                 <td class="lbl">Ngày sinh:</td>
-                <td colspan="2" class="val-c"><input id="customerDob" class="f-input b c" type="text" /></td>
+                <td colspan="2" class="val-c"><input id="customerDob" class="f-input b c tabular date-masked" type="text" placeholder="dd/mm/yyyy" inputmode="numeric" /></td>
               </tr>
               <tr>
                 <td class="lbl">Điện thoại /Email:</td>
@@ -2092,7 +2092,7 @@
               <tr>
                 <td class="lbl">Ngày báo giá:</td>
                 <td class="val-c">
-                  <input id="quoteDate" class="f-input b c date-picker-screen" type="date" />
+                  <input id="quoteDate" class="f-input b c date-picker-screen" type="text" placeholder="dd/mm/yyyy" inputmode="numeric" />
                   <span id="quoteDatePrint" class="print-only-date"></span>
                 </td>
               </tr>
@@ -2508,7 +2508,7 @@
             <div class="cccd-dropzone-title">Kéo thả ảnh vào đây, bấm để chọn file, hoặc nhấn Ctrl+V để dán ảnh</div>
             <div class="cccd-dropzone-sub">
               Hỗ trợ ảnh thẻ CCCD (mặt trước &amp; mặt sau), ảnh chụp màn hình VNeID Định danh mức 2, thẻ căn cước điện tử.<br />
-              Tự động ưu tiên <strong>quét mã QR (chính xác 100%)</strong> trước, sau đó đọc chữ <strong>OCR Tiếng Việt</strong>.
+              Tự động ưu tiên <strong>quét mã QR (cần đối chiếu)</strong> trước, sau đó đọc chữ <strong>OCR Tiếng Việt</strong>.
             </div>
             <input type="file" id="cccdFileInput" accept="image/*" multiple style="display: none;" />
           </div>
@@ -2556,7 +2556,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
             <span>2. Thông tin đã chuyển đổi (Kiểm tra &amp; Chuyển sang Worksheet)</span>
           </div>
-          <span id="cccdSourceBadge" class="count-badge" style="display: none;">QR 100%</span>
+          <span id="cccdSourceBadge" class="count-badge" style="display: none;">QR CCCD</span>
         </div>
         <div class="tool-card-body">
           <div class="cccd-field-list">
@@ -3212,11 +3212,32 @@
         return Math.round(num).toLocaleString('en-US');
       }
 
-      function formatDateVN(iso) {
-        if (!iso) return '';
-        const parts = iso.split('-');
-        if (parts.length !== 3) return iso;
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      function validDateVN(value) {
+        const v = String(value ?? '').normalize('NFC').trim();
+        let m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        let y, mo, d;
+        if (m) [,y,mo,d] = m;
+        else {
+          m = v.match(/^(\d{1,2})[\/\-.\s]+(\d{1,2})[\/\-.\s]+(\d{4})$/) || v.match(/^(\d{2})(\d{2})(\d{4})$/) || v.match(/^(?:ngày\s*)?(\d{1,2})\s*tháng\s*(\d{1,2})\s*năm\s*(\d{4})$/i);
+          if (!m) return '';
+          [,d,mo,y] = m;
+        }
+        const dt = new Date(Date.UTC(+y,+mo-1,+d));
+        if (+y < 1000 || dt.getUTCFullYear() !== +y || dt.getUTCMonth()+1 !== +mo || dt.getUTCDate() !== +d) return '';
+        return `${String(d).padStart(2,'0')}/${String(mo).padStart(2,'0')}/${y}`;
+      }
+      function formatDateVN(value) { return validDateVN(value) || String(value || ''); }
+      function dateToIso(value) { const v = validDateVN(value); return v ? v.split('/').reverse().join('-') : ''; }
+      function bindVNDate(el, callback, optionalText = false) {
+        el.addEventListener('blur', () => {
+          const raw = el.value.trim();
+          const v = validDateVN(raw);
+          el.setCustomValidity(raw && !v && !optionalText ? 'Ngày không hợp lệ. Nhập dd/mm/yyyy.' : '');
+          el.style.outline = raw && !v && !optionalText ? '1px solid #dc2626' : '';
+          if (v) { el.value = v; if (callback) callback(v); }
+          else if (raw && !optionalText) showToast('Ngày không hợp lệ: ' + raw);
+        });
+        el.addEventListener('input', () => { el.setCustomValidity(''); el.style.outline = ''; });
       }
 
       function uid() {
@@ -3268,6 +3289,8 @@
 
       function normalizeState(raw) {
         const merged = Object.assign(createBlankState(), raw || {});
+        merged.quoteDate = dateToIso(merged.quoteDate) || merged.quoteDate;
+        for (const k of ['customerDob','idIssueDate','deliveryTime']) merged[k] = formatDateVN(merged[k]);
         merged.feeConfig = Object.assign({}, DEFAULT_FEE_CONFIG, raw?.feeConfig || {});
         if (!Array.isArray(merged.costItems)) {
           const old = raw?.costs || {};
@@ -3471,7 +3494,7 @@
       function populateFormFromState() {
         document.getElementById('tvbhName').value = state.tvbhName || '';
         document.getElementById('customerName').value = state.customerName || '';
-        document.getElementById('quoteDate').value = state.quoteDate || '';
+        document.getElementById('quoteDate').value = formatDateVN(state.quoteDate);
         document.getElementById('customerAddress').value = state.customerAddress || '';
         setCarModelValue(state.carModel || '');
         document.getElementById('representative').value = state.representative || '';
@@ -3705,13 +3728,15 @@
         textBindings.forEach(([elId, key]) => {
           const el = document.getElementById(elId);
           el.addEventListener('input', () => {
-            state[key] = el.value;
+            state[key] = key === 'quoteDate' ? (dateToIso(el.value) || el.value) : el.value;
             if (el.tagName === 'TEXTAREA') autoResizeTextarea(el);
             renderCalculationsAndPromos();
             scheduleAutosave();
           });
         });
 
+        ['quoteDate','customerDob','idIssueDate','deliveryTime'].forEach(id => bindVNDate(document.getElementById(id), v => { state[id] = id === 'quoteDate' ? dateToIso(v) : v; renderCalculationsAndPromos(); scheduleAutosave(); }, id === 'deliveryTime'));
+        ['extDob','extIssueDate'].forEach(id => bindVNDate(document.getElementById(id)));
         document.querySelectorAll('.pay-choice').forEach((el) => {
           const activate = () => {
             state.paymentMethod = el.dataset.pay;
@@ -4231,7 +4256,7 @@
 
         document.getElementById('btnExportAllJson').addEventListener('click', () => {
           const records = getSavedRecords();
-          const today = new Date().toISOString().slice(0, 10);
+          const today = dateToIso(new Date().toLocaleDateString('vi-VN'));
           downloadJson({ type: 'vinfast-worksheet-backup', version: 1, records }, `vinfast-worksheets-backup-${today}.json`);
           showToast(`Đã sao lưu ${records.length} tiến trình ra file JSON`);
         });
@@ -4379,7 +4404,7 @@
           }
 
           const rows = buildExcelRowsFromRecords(records);
-          const today = new Date().toISOString().slice(0, 10);
+          const today = dateToIso(new Date().toLocaleDateString('vi-VN'));
           const filename = `danh-sach-worksheet-vinfast-${today}.xlsx`;
 
           try {
@@ -4431,11 +4456,7 @@
         }
 
         /* ======================== RESTORE / IMPORT WORKSHEETS FROM EXCEL (.XLSX / .CSV) ======================== */
-        function parseDateVNToIso(str) {
-          const m = String(str || '').trim().match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
-          if (!m) return String(str || '').trim();
-          return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
-        }
+        function parseDateVNToIso(str) { return dateToIso(str); }
 
         function mapStatusLabelToKey(label) {
           const s = stripDiacritics(label).toLowerCase();
@@ -4505,14 +4526,14 @@
                 data.customerName = custName;
                 data.customerContact = String(r['Điện thoại / Email'] || '').trim();
                 data.customerIdNumber = String(r['CCCD / MST'] || '').trim();
-                data.customerDob = String(r['Ngày sinh'] || '').trim();
-                data.idIssueDate = String(r['Ngày cấp'] || '').trim();
+                data.customerDob = formatDateVN(r['Ngày sinh']);
+                data.idIssueDate = formatDateVN(r['Ngày cấp']);
                 data.idIssuePlace = String(r['Nơi cấp'] || '').trim() || data.idIssuePlace;
                 data.customerAddress = String(r['Địa chỉ'] || '').trim();
                 data.carModel = carModel;
                 data.carColor = String(r['Màu xe'] || '').trim();
                 data.paymentMethod = /tiền mặt|tien mat/i.test(String(r['Phương thức TT'] || '')) ? 'cash' : 'installment';
-                data.deliveryTime = String(r['Dự kiến giao xe'] || '').trim();
+                data.deliveryTime = formatDateVN(r['Dự kiến giao xe']);
                 data.deliveryLocation = String(r['Địa điểm giao xe'] || '').trim();
                 data.listPrice = parseMoney(r['Giá công bố']) || 0;
                 const totalDisc = parseMoney(r['Tổng giảm giá']) || 0;
@@ -4829,19 +4850,13 @@
             s.src = url;
             s.async = true;
             s.onload = () => resolve();
-            s.onerror = () => reject(new Error('Không tải được thư viện ' + url));
+            s.onerror = () => { delete loadedScripts[url]; s.remove(); reject(new Error('Không tải được thư viện ' + url)); };
             document.head.appendChild(s);
           });
           return loadedScripts[url];
         }
 
-        function formatCompactDate(ddmmyyyy) {
-          const clean = String(ddmmyyyy || '').replace(/\D/g, '');
-          if (clean.length === 8) {
-            return `${clean.slice(0, 2)}/${clean.slice(2, 4)}/${clean.slice(4, 8)}`;
-          }
-          return ddmmyyyy || '';
-        }
+        function formatCompactDate(value) { return validDateVN(value); }
 
         /* Parse official Vietnamese CCCD / VNeID QR payload:
            Format: id|oldId|fullName|ddmmyyyy|gender|address|issueDate(ddmmyyyy) */
@@ -4855,7 +4870,7 @@
             address: (parts[5] || '').trim(),
             issueDate: formatCompactDate(parts[6] || ''),
             issuePlace: 'Cục Trưởng Cục Cảnh Sát QLHC Về TTXH',
-            source: 'QR 100%'
+            source: 'QR CCCD'
           };
         }
 
@@ -4891,7 +4906,7 @@
 
         /* Smart Multi-Strategy Vietnamese CCCD / VNeID Parser (handles garbled OCR!) */
         function parseVietnameseCccdText(text) {
-          const raw = String(text || '').replace(/\r/g, '\n');
+          const raw = String(text || '').normalize('NFC').replace(/\r\n?/g, '\n');
           const qrDirect = parseCccdQrPayload(raw);
           if (qrDirect) return qrDirect;
 
@@ -4983,36 +4998,24 @@
             else if (mrz?.fullName) result.fullName = mrz.fullName;
           }
 
-          // 3. Smart Dates Extraction (DOB vs Issue Date — ignores Expiry Date in the future)
-          const currentYear = new Date().getFullYear();
-          const dobLabelMatch = stripDiacritics(raw).match(/(?:ngay(?:,\s*thang,\s*nam)?\s*sinh|date\s*of\s*birth)[^\d]{0,30}(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i);
-          if (dobLabelMatch) result.dob = dobLabelMatch[1].replace(/[\-\.]/g, '/');
-
-          const issueLabelMatch1 = stripDiacritics(raw).match(/(?:ngay(?:,\s*thang,\s*nam)?\s*cap|date\s*of\s*issue)[^\d]{0,30}(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i);
-          const issueLabelMatch2 = stripDiacritics(raw).match(/ngay\s*(\d{1,2})\s*thang\s*(\d{1,2})\s*nam\s*(\d{4})/i);
-          if (issueLabelMatch1) {
-            result.issueDate = issueLabelMatch1[1].replace(/[\-\.]/g, '/');
-          } else if (issueLabelMatch2) {
-            result.issueDate = `${issueLabelMatch2[1].padStart(2, '0')}/${issueLabelMatch2[2].padStart(2, '0')}/${issueLabelMatch2[3]}`;
+          // Dates are extracted only from their own labels; never guess issue date from expiry.
+          const dateToken = /(?:\d{4}-\d{1,2}-\d{1,2}|[0-9OIl]{1,2}\s*[\/.-]\s*[0-9OIl]{1,2}\s*[\/.-]\s*[0-9OIl]{4}|\d{1,2}\s*thang\s*\d{1,2}\s*nam\s*\d{4}|\d{8})/i;
+          function labelledDate(label) {
+            for (let i=0; i<lines.length; i++) {
+              const hit = normLines[i].match(label);
+              if (!hit) continue;
+              const tail = normLines[i].slice(hit.index + hit[0].length);
+              const next = normLines[i+1] || '';
+              const match = tail.match(dateToken) || (!HEADER_NOISE.test(next) && next.match(dateToken));
+              if (match) {
+                const v = validDateVN(match[0].replace(/o/gi,'0').replace(/[il]/gi,'1').replace(/\s*([\/.-])\s*/g,'$1').replace(/thang/g,'tháng').replace(/nam/g,'năm'));
+                if (v && dateToIso(v) <= dateToIso(new Date().toLocaleDateString('vi-VN'))) return v;
+              }
+            }
+            return '';
           }
-
-          // Fallback: scan all dd/mm/yyyy dates if labels were garbled by OCR
-          const allDates = [...raw.matchAll(/\b(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.]((?:19|20)\d{2})\b/g)]
-            .map((m) => ({
-              str: `${m[1].padStart(2, '0')}/${m[2].padStart(2, '0')}/${m[3]}`,
-              year: parseInt(m[3], 10)
-            }))
-            .filter((d) => d.year >= 1930 && d.year <= currentYear + 1);
-
-          if (!result.dob) {
-            const birthCand = allDates.find((d) => d.year <= currentYear - 14);
-            if (birthCand) result.dob = birthCand.str;
-            else if (mrz?.dob) result.dob = mrz.dob;
-          }
-          if (!result.issueDate) {
-            const issueCand = allDates.find((d) => d.year >= 2016 && d.str !== result.dob);
-            if (issueCand) result.issueDate = issueCand.str;
-          }
+          result.dob = labelledDate(/ngay(?:[,\s]+thang[,\s]+nam)?\s*sinh|date\s*of\s*birth/) || validDateVN(mrz?.dob);
+          result.issueDate = labelledDate(/ngay(?:[,\s]+thang[,\s]+nam)?\s*cap|date\s*of\s*issue/);
 
           // 4. Issue place
           const normAll = stripDiacritics(raw).toLowerCase();
@@ -5051,13 +5054,13 @@
 
         function fillExtractedFields(data) {
           if (!data) return;
-          if (data.fullName) document.getElementById('extFullName').value = data.fullName;
-          if (data.idNumber) document.getElementById('extIdNumber').value = data.idNumber;
-          if (data.dob) document.getElementById('extDob').value = data.dob;
-          if (data.address) document.getElementById('extAddress').value = data.address;
-          if (data.issueDate) document.getElementById('extIssueDate').value = data.issueDate;
-          if (data.issuePlace) document.getElementById('extIssuePlace').value = data.issuePlace;
-          if (data.contact) document.getElementById('extContact').value = data.contact;
+          document.getElementById('extFullName').value = data.fullName || '';
+          document.getElementById('extIdNumber').value = data.idNumber || '';
+          document.getElementById('extDob').value = validDateVN(data.dob);
+          document.getElementById('extAddress').value = data.address || '';
+          document.getElementById('extIssueDate').value = validDateVN(data.issueDate);
+          document.getElementById('extIssuePlace').value = data.issuePlace || '';
+          document.getElementById('extContact').value = data.contact || '';
           const badge = document.getElementById('cccdSourceBadge');
           if (data.source) {
             badge.textContent = data.source;
@@ -5068,10 +5071,9 @@
         /* Preprocess CCCD photo on Canvas (Red-channel + contrast boost removes blue/green security background!) */
         async function preprocessImageForOcr(dataUrl) {
           const img = new Image();
-          img.src = dataUrl;
-          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = dataUrl; });
           const targetW = Math.min(2200, Math.max(1400, img.width));
-          const scale = targetW / img.width;
+          const scale = Math.min(targetW / img.width, 2600 / img.height);
           const canvas = document.createElement('canvas');
           canvas.width = Math.round(img.width * scale);
           canvas.height = Math.round(img.height * scale);
@@ -5092,8 +5094,7 @@
         /* Multi-region + high-contrast QR decoder (supports Chip CCCD front, Căn cước 2024 back, VNeID dark/light) */
         async function decodeQrFromDataUrl(dataUrl) {
           const img = new Image();
-          img.src = dataUrl;
-          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = dataUrl; });
 
           if ('BarcodeDetector' in window) {
             try {
@@ -5213,12 +5214,12 @@
           setCccdProgress(true, 'Bước 1/2: Đang quét mã QR đa vùng trên ảnh CCCD / VNeID...', '');
           let qrResult = null;
           for (let i = 0; i < cccdImages.length; i++) {
-            const qrRaw = await decodeQrFromDataUrl(cccdImages[i].dataUrl);
+            const qrRaw = await decodeQrFromDataUrl(cccdImages[i].dataUrl).catch(() => null);
             if (qrRaw) {
               const parsedQr = parseCccdQrPayload(qrRaw);
               if (parsedQr) {
                 qrResult = parsedQr;
-                document.getElementById('cccdRawText').value = `[QR CCCD — Chính xác 100%]\n${qrRaw}`;
+                document.getElementById('cccdRawText').value = `[QR CCCD — Cần đối chiếu]\n${qrRaw}`;
                 fillExtractedFields(parsedQr);
                 break;
               }
@@ -5227,13 +5228,13 @@
 
           if (qrResult) {
             setCccdProgress(false);
-            showToast('Đã đọc thành công từ mã QR CCCD (chính xác 100%)!');
+            showToast('Đã đọc thành công từ mã QR CCCD (cần đối chiếu)!');
             return;
           }
 
           // Step 2A: If user saved an AI API Key, automatically use AI Vision (much smarter than raw OCR!)
           const apiKey = (document.getElementById('geminiApiKeyInput').value || '').trim();
-          if (apiKey) {
+          if (apiKey && window.confirm('Gửi ảnh CCCD/VNeID tới Google Gemini để phân tích? Chọn Hủy để dùng OCR trên thiết bị.')) {
             try {
               const aiRes = await runGeminiVisionExtraction();
               if (aiRes.ok) {
@@ -5249,18 +5250,22 @@
             setCccdProgress(true, 'Bước 2/2: Đang khử nền & đọc chữ Tiếng Việt (OCR)...', '');
             await loadExternalScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js', () => typeof window.Tesseract !== 'undefined');
             let combinedText = '';
-            for (let i = 0; i < cccdImages.length; i++) {
-              setCccdProgress(true, `Đang khử nền bảo mật & OCR ảnh ${i + 1}/${cccdImages.length}...`, '0%');
-              const cleanedUrl = await preprocessImageForOcr(cccdImages[i].dataUrl);
-              const res = await window.Tesseract.recognize(cleanedUrl, 'vie', {
-                logger: (m) => {
-                  if (m.status === 'recognizing text') {
-                    setCccdProgress(true, `Đang đọc OCR ảnh ${i + 1}/${cccdImages.length}...`, `${Math.round((m.progress || 0) * 100)}%`);
-                  }
-                }
+            let worker;
+            try {
+              worker = await window.Tesseract.createWorker('vie+eng', 1, {
+                logger: m => { if (m.status === 'recognizing text') setCccdProgress(true, 'Đang nhận dạng tiếng Việt…', `${Math.round((m.progress || 0)*100)}%`); }
               });
-              combinedText += (combinedText ? '\n---\n' : '') + (res.data?.text || '');
-            }
+              for (const [i, image] of cccdImages.slice().entries()) {
+                const cleaned = await preprocessImageForOcr(image.dataUrl);
+                await worker.setParameters({ tessedit_pageseg_mode: '11', preserve_interword_spaces: '1' });
+                const first = (await worker.recognize(cleaned)).data;
+                await worker.setParameters({ tessedit_pageseg_mode: '6' });
+                const second = (await worker.recognize(image.dataUrl)).data;
+                const rank = d => { const p = parseVietnameseCccdText(d.text); return (d.confidence || 0) + 12 * ['idNumber','fullName','dob','address','issueDate'].filter(k => p[k]).length; };
+                const best = rank(first) >= rank(second) ? first : second;
+                combinedText += (combinedText ? '\n---\n' : '') + best.text;
+              }
+            } finally { if (worker) await worker.terminate(); }
             document.getElementById('cccdRawText').value = combinedText;
             const parsed = parseVietnameseCccdText(combinedText);
             fillExtractedFields(parsed);
@@ -5367,9 +5372,10 @@
         document.getElementById('btnPushToWorksheet').addEventListener('click', () => {
           const fullName = document.getElementById('extFullName').value.trim();
           const idNumber = document.getElementById('extIdNumber').value.trim();
-          const dob = document.getElementById('extDob').value.trim();
+          const dob = validDateVN(document.getElementById('extDob').value);
           const address = document.getElementById('extAddress').value.trim();
-          const issueDate = document.getElementById('extIssueDate').value.trim();
+          const issueDate = validDateVN(document.getElementById('extIssueDate').value);
+          if ((document.getElementById('extDob').value.trim() && !dob) || (document.getElementById('extIssueDate').value.trim() && !issueDate)) { showToast('Vui lòng sửa ngày không hợp lệ trước khi chuyển.'); return; }
           const issuePlace = document.getElementById('extIssuePlace').value.trim();
           const contact = document.getElementById('extContact').value.trim();
 
